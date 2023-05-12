@@ -9,7 +9,7 @@
 
 </nav>
 
-<!-- ************ Login Modal ********************** -->
+<!-- ************ Login Modal -->
 
 <div class="modal fade" id="loginModalToggle" aria-labelledby="loginModalToggleLabel" tabindex="-1"
   style="display: none;" aria-hidden="true">
@@ -21,6 +21,21 @@
           id="loginModalToggleClose"></button>
       </div>
       <div class="modal-body">
+
+        <?php 
+
+          if(isset($_SESSION['status']) && !isset($_GET['auth'])) { 
+            ?>
+
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              <strong>Hey! </strong> <?php echo $_SESSION['status'] ?>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <?php 
+            unset($_SESSION['status']);
+            } 
+        ?>
+
         <form action="controllers/auth.php" method="POST">
           <div class="mb-3">
             <label for="login_email" class="form-label">Email address</label>
@@ -52,10 +67,26 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+
+          <?php 
+
+          if(isset($_SESSION['status']) && isset($_GET['auth']) && $_GET['auth'] == "signup") { 
+            ?>
+
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              <strong>Hey! </strong> <?php echo $_SESSION['status'] ?>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <?php 
+            unset($_SESSION['status']);
+            } 
+          ?>
+
         <form action="controllers/auth.php" method="POST">
           <div class="mb-3">
             <label for="signup_username" class="form-label">User Name</label>
-            <input type="email" class="form-control" id="signup_username" aria-describedby="emailHelp"
+            <input type="text" class="form-control" id="signup_username" aria-describedby="emailHelp"
               name="signup_username">
           </div>
           <div class="mb-3">
@@ -80,6 +111,8 @@
   </div>
 </div>
 
+
+<!-- This code is working for when and what modal is going to open -->
 <?php
 if (!isset($_SESSION['email'])):
   ?>
@@ -88,11 +121,22 @@ if (!isset($_SESSION['email'])):
     $(document).ready(function () {
       // Show the modal
 
-      $('#loginModalToggle').modal('show');
+      <?php if(isset($_GET['auth']) && $_GET['auth'] == "signup") { ?>
+        $('#signupModalToggle').modal('show');
+      <?php } else { ?>
+        $('#loginModalToggle').modal('show');
+      <?php } ?>
 
       $('#loginModalToggle').on('hidden.bs.modal', function () {
-        // check if the email session is not set
-        if (<?php echo !isset($_SESSION['email']) ?>) {
+        
+        if (<?php echo !isset($_SESSION['email']) ?> && !$('#signupModalToggle').is(':visible')) {
+          $('#loginModalToggle').modal('show');
+        }
+      });
+
+      $('#signupModalToggle').on('hidden.bs.modal', function () {
+       
+        if (<?php echo !isset($_SESSION['email']) ?> ) {
           $('#loginModalToggle').modal('show');
         }
       });
