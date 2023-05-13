@@ -1,0 +1,10 @@
+<?php
+
+
+
+
+echo "detailed Image";
+
+
+
+?>

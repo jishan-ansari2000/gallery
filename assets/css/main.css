@@ -2,3 +2,75 @@ body {
     padding: 0;
     margin: 0;
 }
+
+.home_default {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 80px;
+    bottom: 0;
+}
+
+.home_default > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.05;
+}
+
+.home_default_card {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+
+    width: 70%;
+    padding: 40px;
+    text-align: center;
+}
+
+.home_default_card h5 {
+    font-size: 40px;
+}
+
+.home_default_card p {
+    font-size: 30px
+}
+
+
+
+
+.uploadBtn {
+    position: fixed;
+    z-index: 100;
+    font-size: 18px;
+    padding: 10px 30px;
+
+    border-radius: 50px !important;
+
+    bottom: 30px;
+    right: 30px;
+
+}
+
+
+
+.image_row img{
+ width: 100%;
+}
+
+.image_title_form {
+    display: none;
+}
+
+.editing {
+    color: green;
+}
+
+.image_title_form.editing {
+    display: block;
+}
+
+.image_title.editing {
+    display: none;
+}
