@@ -39,6 +39,31 @@ $(".image_title_form").submit(function(e){
   });
 });
 
+$(".image_delete_form").submit(function(e){
+  e.preventDefault();
+
+  if(confirm('Are you sure you want to delete the Image')){
+    let id = e.target.image_id.value;
+
+    $.ajax({
+      type: "POST",
+      url: "controllers/image_handler.php",
+      data: {
+        delete_image: "delete_image",
+        id: id
+      },
+    }).done(function (data) {
+      let obj = $.parseJSON(data);
+      if (obj.status === "success") {
+        console.log( `#${obj.image_id}`);
+        $(`#${obj.image_id}`).remove();
+      }
+    });
+  } 
+
+  
+});
+
 // function copyLinkHandler(id) {
 //   let shareLinkInput = $(`#shareLinkInput-${id}`);
 

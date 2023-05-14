@@ -9,21 +9,6 @@ $query_run = mysqli_query($conn, $query);
 ?>
 
 <div class="container">
-    
-    <?php
-
-  if (isset($_SESSION['status']) && !isset($_GET['auth'])) {
-    ?>
-
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <strong>Hey! </strong>
-        <?php echo $_SESSION['status'] ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php
-    unset($_SESSION['status']);
-  }
-  ?>
 
     <div class="row image_row">
 
@@ -38,8 +23,8 @@ $query_run = mysqli_query($conn, $query);
         <div class="col col-lg-3 col-md-4 mt-4" id="<?php echo $row['id']; ?>">
             <button onclick="show_updateImage_input(<?php echo $row['id']; ?>);">Edit</button>
 
-            <form action="controllers/image_handler.php" method="POST" onsubmit="return confirm('Are you sure you want to delete the Image');">
-                <input type="hidden" value="<?php echo $row['id']; ?>" name="id" />
+            <form class="image_delete_form" >
+                <input type="hidden" value="<?php echo $row['id']; ?>" name="image_id" />
                 <input type="submit" name="delete_image" value="Delete"/>
             </form>
 
@@ -74,19 +59,9 @@ $query_run = mysqli_query($conn, $query);
                     <input type="hidden" name="image_id" value="<?php echo $row['id']; ?>" />
                     <input type="text" aria-label="Last name" class="form-control" name="image_name"
                         value="<?php echo $row['image_name']; ?>">
-                    <button class="btn btn-outline-secondary" type="submit">Button</button>
+                    <button class="btn btn-outline-secondary" type="submit" style="display: none;"></button>
                 </div>
             </form>
-
-            <!-- <div class="image_title_form">
-                <div class="input-group">
-                    <input type="hidden" name="image_id" value="<?php //echo $row['id']; ?>" />
-                    <input type="text" aria-label="Last name" class="form-control" name="image_name"
-                        value="<?php //echo $row['image_name']; ?>">
-                    <button class="btn btn-outline-secondary"
-                        onclick="submit_update_image(<?php //echo $row['id']; ?>);">Button</button>
-                </div>
-            </div> -->
 
         </div>
 

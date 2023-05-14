@@ -113,19 +113,25 @@ if (isset($_POST['delete_image'])) {
             $target_image_name = $row['image_name'];
         }
     }
-    echo $old_img;
 
     $query = "DELETE FROM images_table where id = '$id' && user_email = '$user_email'";
     $query_run = mysqli_query($conn, $query);
 
+    $result = [
+        "status" => "",
+        "image_id" => "",
+    ];
+
     if ($query_run) {
-        $_SESSION['status'] = $target_image_name . " - Deleted!";
         unlink("../" . $old_img);
-        header('location: ../index.php');
+        $result["status"] = "success";
+        $result["image_id"] = $id;
     } else {
-        $_SESSION['status'] = "Image Not Deleted";
-        header('location: ../index.php');
+        $result["status"] = "failed";
+        $result["image_id"] = $id;
     }
+
+    echo json_encode($result);
 }
 
 
