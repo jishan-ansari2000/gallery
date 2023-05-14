@@ -1,13 +1,15 @@
 <nav class="navbar navbar-light bg-light" style="padding: 20px 50px;">
 
-    <a class="navbar-brand" href="#">Gallery</a>
+    <a class="navbar-brand" href="/">Gallery</a>
     <div>
+        
         <button class="btn btn-primary" data-bs-target="#loginModalToggle" data-bs-toggle="modal">Login</button>
         <button class="btn btn-primary" data-bs-target="#signupModalToggle" data-bs-toggle="modal">Sign Up</button>
         
           <form action="controllers/auth.php" method="POST" style="display: inline-block">
             <button type="submit" class="btn btn-primary" name="logout" value="logout">logout</button>
           </form>
+
     </div>
 
 </nav>

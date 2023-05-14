@@ -8,10 +8,8 @@ $query_run = mysqli_query($conn, $query);
 
 ?>
 
-
-
 <div class="container">
-
+    
     <?php
 
   if (isset($_SESSION['status']) && !isset($_GET['auth'])) {
@@ -40,15 +38,17 @@ $query_run = mysqli_query($conn, $query);
         <div class="col col-lg-3 col-md-4 mt-4" id="<?php echo $row['id']; ?>">
             <button onclick="show_updateImage_input(<?php echo $row['id']; ?>);">Edit</button>
 
-            <form action="controllers/image_handler.php" method="POST">
+            <form action="controllers/image_handler.php" method="POST" onsubmit="return confirm('Are you sure you want to delete the Image');">
                 <input type="hidden" value="<?php echo $row['id']; ?>" name="id" />
-                <button type="submit" name="delete_image" value="Delete Image">Delete</button>
+                <input type="submit" name="delete_image" value="Delete"/>
+                <!-- <input type='submit' value='Delete' onclick = 'return checkdelete()'> -->
             </form>
 
-            <a href="detailed_image.php"><img src="<?php echo $img ?>" alt="alex" /></a>
+            <a href="detailed_image.php?id=<?php echo $row['id']; ?>"><img src="<?php echo $img ?>" alt="alex" /></a>
             <p class="image_title">
                 <?php echo $row['image_name']; ?>
             </p>
+
             <div class="image_title_form">
                 <div class="input-group">
                     <input type="hidden" name="image_id" value="<?php echo $row['id']; ?>" />
@@ -58,6 +58,7 @@ $query_run = mysqli_query($conn, $query);
                         onclick="submit_update_image(<?php echo $row['id']; ?>);">Button</button>
                 </div>
             </div>
+
         </div>
 
         <?php

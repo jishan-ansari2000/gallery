@@ -129,6 +129,54 @@ if (isset($_POST['delete_image'])) {
 }
 
 
+if( isset( $_POST['next_image'] ) ) {
+    $id= $_POST['id'];
+
+    $user_email = $_SESSION['email'];
+
+    $result = [
+        "status"=> "success",
+        "images" => $id
+    ];
+
+    $query = "SELECT * FROM images_table where user_email = '$user_email' && id < '$id' order by id desc limit 5";
+    $query_run = mysqli_query($conn, $query);
+
+    if(mysqli_num_rows($query_run) > 0) {
+        $rows = $query_run->fetch_all(MYSQLI_ASSOC);
+        $result['images'] = $rows;
+    } else {
+        $result["status"] = "zeroImages";
+        $result["message"] = "This is last Image!";
+    }
+
+    echo json_encode($result);
+}
+
+if( isset( $_POST['prev_image'] ) ) {
+    $id= $_POST['id'];
+
+    $user_email = $_SESSION['email'];
+
+    $result = [
+        "status"=> "success",
+        "images" => $id
+    ];
+
+    $query = "SELECT * FROM images_table where user_email = '$user_email' && id > '$id' order by id limit 5";
+    $query_run = mysqli_query($conn, $query);
+
+    if(mysqli_num_rows($query_run) > 0) {
+        $rows = $query_run->fetch_all(MYSQLI_ASSOC);
+        $result['images'] = $rows;
+    } else {
+        $result["status"] = "zeroImages";
+        $result["message"] = "This is First Image!";
+    }
+
+    echo json_encode($result);
+}
+
 
 
 ?>
