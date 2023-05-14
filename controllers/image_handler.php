@@ -147,7 +147,7 @@ if( isset( $_POST['next_image'] ) ) {
         $result['images'] = $rows;
     } else {
         $result["status"] = "zeroImages";
-        $result["message"] = "This is last Image!";
+        $result["message"] = "There is no any image left!";
     }
 
     echo json_encode($result);
@@ -171,7 +171,7 @@ if( isset( $_POST['prev_image'] ) ) {
         $result['images'] = $rows;
     } else {
         $result["status"] = "zeroImages";
-        $result["message"] = "This is First Image!";
+        $result["message"] = "There is no any image left!";
     }
 
     echo json_encode($result);
