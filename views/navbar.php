@@ -1,15 +1,17 @@
-<nav class="navbar navbar-light bg-light" style="padding: 20px 50px;">
+<nav class="navbar shadow-sm navbar-light bg-light">
 
     <a class="navbar-brand" href="/">Gallery</a>
     <div>
         
-        <button class="btn btn-primary" data-bs-target="#loginModalToggle" data-bs-toggle="modal">Login</button>
-        <button class="btn btn-primary" data-bs-target="#signupModalToggle" data-bs-toggle="modal">Sign Up</button>
-        
-          <form action="controllers/auth.php" method="POST" style="display: inline-block">
-            <button type="submit" class="btn btn-primary" name="logout" value="logout">logout</button>
-          </form>
-
+        <?php if(!isset($_SESSION['email'])) { ?>
+            <button class="btn btn-primary navBtn" data-bs-target="#loginModalToggle" data-bs-toggle="modal">Login</button>
+            <button class="btn btn-outline-primary navBtn" data-bs-target="#signupModalToggle" data-bs-toggle="modal">Sign Up</button>
+        <?php } else { ?>
+            <form action="controllers/auth.php" method="POST" style="display: inline-block">
+                <button type="submit" class="btn btn-danger navBtn" name="logout" value="logout">logout</button>
+            </form>
+        <?php } ?>
+      
     </div>
 
 </nav>
@@ -28,8 +30,9 @@
 
                 <?php
                 $auth_status = isset($_SESSION['status']) && isset($_GET['auth']) && $_GET['auth'] == "login";
+                $notLoggedIn = isset($_SESSION["not_loggedIn"]) && !(isset($_SESSION['status']) && isset($_GET['auth']) && $_GET['auth'] == "signup");
 
-                if ($auth_status || isset($_SESSION["not_loggedIn"])) {
+                if ($auth_status || $notLoggedIn ) {
                   ?>
 
                         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -137,9 +140,9 @@ $(document).ready(function() {
     // Show the modal
 
     <?php if (isset($_GET['auth']) && $_GET['auth'] == "signup") { ?>
-    $('#signupModalToggle').modal('show');
+        $('#signupModalToggle').modal('show');
     <?php } else { ?>
-    $('#loginModalToggle').modal('show');
+        $('#loginModalToggle').modal('show');
     <?php } ?>
 
     $('#loginModalToggle').on('hidden.bs.modal', function() {

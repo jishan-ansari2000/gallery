@@ -7,6 +7,18 @@
 
   include("views/image_upload_form.php");
 
+  include("views/display_images.php");
+
+} else {
+
+  include("views/home_default.php");
+
+} ?>
+
+
+
+
+<?php
   // echo $_SERVER['QUERY_STRING'] . "<br>";
   // echo $_SERVER['SCRIPT_NAME'] . "<br>";
   // echo $_SERVER['DOCUMENT_ROOT'] . "<br>";
@@ -14,13 +26,6 @@
   // parse_str($_SERVER['QUERY_STRING'], $query_array);
   // print_r($query_array);
 
-  include("views/display_images.php");
-
-
-} else {
-
-  include("views/home_default.php");
-
-} ?>
+?>
 
 <?php include("views/footer.php"); ?>

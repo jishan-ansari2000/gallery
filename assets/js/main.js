@@ -1,12 +1,22 @@
 function show_updateImage_input(id) {
   let target_form = $("#" + id + " .image_title_form");
   let target_p = $("#" + id + " .image_title");
+  let input_field = $("#" + id + " .image_title_form input[name=image_name]");
 
   $(".image_title_form").removeClass("editing");
   $(".image_title").removeClass("editing");
 
   target_form.addClass("editing");
   target_p.addClass("editing");
+
+  input_field.focus();
+
+  var inputValue = input_field.val();
+  input_field.val('');
+  input_field.val(inputValue);
+
+  var inputElement = input_field.get(0);
+  inputElement.scrollLeft = inputElement.scrollWidth;
 }
 
 $(".image_title_form").submit(function(e){
@@ -78,6 +88,64 @@ $(".image_delete_form").submit(function(e){
 
 // }
 
+function imageMouseOver(id) {
+  let cardimgOverlay = $(`#${id} .card-image-overlay`);
+  let cardBtnContainer = $(`#${id} .card-btn-container`);
+
+  cardimgOverlay.css("background", "rgba(60, 60, 60, 0.4)");
+  cardBtnContainer.css("display", "block");
+}
+
+function imageMouseOut(id) {
+  let cardimgOverlay = $(`#${id} .card-image-overlay`);
+  let cardBtnContainer = $(`#${id} .card-btn-container`);
+
+  cardBtnContainer.css("display", "none");
+  cardimgOverlay.css("background", "unset");
+}
+
+function btnMouseOver(id) {
+  let cardimgOverlay = $(`#${id} .card-image-overlay`);
+  let cardBtnContainer = $(`#${id} .card-btn-container`);
+
+  cardBtnContainer.css("display", "block");
+  cardimgOverlay.css("background","rgba(60, 60, 60, 0.4)");
+}
+
+function btnMouseOut(id) {
+  let cardimgOverlay = $(`#${id} .card-image-overlay`);
+  let cardBtnContainer = $(`#${id} .card-btn-container`);
+
+  cardBtnContainer.css("display", "none");
+  cardimgOverlay.css("background","unset");
+}
+
+
+
+
+// $(document).ready(function () {
+
+//   $('.card-image-overlay').hover(function() {
+//     let cardBtnContainer = $(`#.card-btn-container`);
+
+//     console.log("hover");
+
+//     cardBtnContainer.css("display", "block");
+
+//   }, function(){
+//     let cardBtnContainer = $('.card-btn-container');
+
+//     console.log("hover");
+
+//     cardBtnContainer.css("display", "none");
+//   });
+
+// })
+
+
+
+  // carousel start here
+
 $(document).ready(function () {
   $("#imageCarousel").carousel({
     interval: 1000,
@@ -97,6 +165,10 @@ $(document).ready(function () {
   } else if (carouselLastChild.hasClass("active")) {
     nextBtn.hide();
   }
+
+  
+
+
 
   prevBtn.click(function () {
     let carouselSecondFirstChild = $(".carousel-inner .carousel-item:nth-child(2)");
@@ -139,12 +211,10 @@ $(document).ready(function () {
               value["image_ext"];
 
             let str = `
-              <div class="carousel-item"  style="height: 80vh;" data-value="${value["id"]}">
-                  <img src="${img}" class="d-block w-100" alt="${
-              value["image_name"]
-            }">
-                  <div class="carousel-caption d-none d-md-block">
-                      <h5>${value["image_name"]}</h5>
+              <div class="carousel-item" data-value="${value["id"]}">
+                  <div class="imageCarouselCard">
+                      <img src="${img}" class="d-block w-100" alt="${value["image_name"]}">
+                      <p >${value["image_name"]} </p>
                   </div>
               </div>
             `;
@@ -154,14 +224,14 @@ $(document).ready(function () {
             $("#carousel_container").prepend(str); //append child to carousel
           });
         } else if (obj.status == "zeroImages") {
-          let str = `
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-              <strong>Hey! </strong> ${obj.message}
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-          `;
+          // let str = `
+          //   <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          //     <strong>Hey! </strong> ${obj.message}
+          //     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          // </div>
+          // `;
 
-          $("#imageStatus").html(str);
+          // $("#imageStatus").html(str);
 
           prevBtn.hide();
         }
@@ -206,10 +276,10 @@ $(document).ready(function () {
             let img = value["path"] + value["image_name"] + "-" + value["upload_time"] + "." +  value["image_ext"];
 
             let str = `
-              <div class="carousel-item"  style="height: 80vh;" data-value="${value["id"]}">
-                  <img src="${img}" class="d-block w-100" alt="${value["image_name"] }">
-                  <div class="carousel-caption d-none d-md-block">
-                      <h5>${value["image_name"]}</h5>
+              <div class="carousel-item" data-value="${value["id"]}">
+                  <div class="imageCarouselCard">
+                      <img src="${img}" class="d-block w-100" alt="${value["image_name"]}">
+                      <p >${value["image_name"]} </p>
                   </div>
               </div>
             `;
@@ -219,12 +289,12 @@ $(document).ready(function () {
             $("#carousel_container").append(str); //append child to carousel
           });
         } else if (obj.status == "zeroImages") {
-          let str = `
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-              <strong>Hey! </strong> ${obj.message}
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-          `;
+          // let str = `
+          //   <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          //     <strong>Hey! </strong> ${obj.message}
+          //     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          // </div>
+          // `;
 
           $("#imageStatus").html(str);
         }
@@ -239,6 +309,19 @@ $(document).ready(function () {
     let carouselFirstChild = $(".carousel-inner .carousel-item:nth-child(1)");
     let carouselLastChild = $(".carousel-inner .carousel-item:last-child");
 
+    let currentChild = $('.carousel-item.active');
+
+    $.ajax({
+      type: "POST",
+      url: "controllers/image_handler.php",
+      data: {
+        set_session_id_forurl: "set_session_id",
+        image_id: currentChild.data("value")
+      }
+    }).done(function(data){
+      console.log(data);
+    })
+
     if (carouselFirstChild.hasClass("active")) {
       prevBtn.hide();
     } else if (carouselLastChild.hasClass("active")) {
@@ -248,3 +331,5 @@ $(document).ready(function () {
     }
   });
 });
+
+  // carousel End here

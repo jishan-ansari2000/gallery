@@ -10,7 +10,7 @@ if (isset($_POST['upload'])) {
     $user_email = $_SESSION['email'];
     $images = $_FILES['gallery_images'];
 
-    $path = "assets/images/";
+    $path = "assets/images/user_uploaded/";
     $allowed_extensions = array('gif', 'png', 'jpg', 'jpeg');
 
     $current_time = time(); // Get the current time
@@ -183,6 +183,15 @@ if( isset( $_POST['prev_image'] ) ) {
     echo json_encode($result);
 }
 
+if(isset($_POST['set_session_id_forurl'])) {
+    
+    $_SESSION['current_queries']['id'] = $_POST['image_id'];
 
+ 
+
+    echo json_encode($_SESSION['current_queries']);
+
+    // echo $_POST['image_id'];
+}
 
 ?>

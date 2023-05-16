@@ -6,9 +6,12 @@ include("../config/connection.php");
 
 function get_past_url($auth_type)
 {
-    $past_script_name = $_SESSION['current_script_name'];
     $past_queries_array = $_SESSION["current_queries"];
+    $past_script_name = $_SESSION['current_script_name'];
     $past_queries = "?";
+
+    print_r($_SESSION['temp_current_queries']);
+    print_r($past_queries_array);
 
     foreach ($past_queries_array as $key => $value) {
         if ($key != "auth") {
@@ -93,8 +96,8 @@ if (isset($_POST['login'])) {
 
 if (isset($_POST['logout'])) {
 
-    $current_url = $_SESSION["current_url"];
-    
+    $current_url = get_past_url("auth=logout");
+
     session_unset();
 
     header("location:..{$current_url}");

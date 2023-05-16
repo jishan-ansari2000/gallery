@@ -37,11 +37,33 @@ body {
     font-size: 30px
 }
 
+/* ******navbar start********** */
+
+.navbar {
+    padding: 12px 50px;
+}
+
+.navbar-brand {
+    font-size:32px;
+    font-weight:bold;
+}
+
+.navBtn {
+    border-radius: 30px;
+    padding: 8px 24px;
+    margin-left: 8px;
+}
 
 
+/* display images start */
+/* display images start */
+/* display images start */
+ 
 
+/* Button for upload images which is located to right bottom corner */
 .uploadBtn {
     position: fixed;
+    background-color: #0d77b7;
     z-index: 100;
     font-size: 18px;
     padding: 10px 30px;
@@ -50,17 +72,75 @@ body {
 
     bottom: 30px;
     right: 30px;
-
 }
 
-
+.container {
+    padding-top: 30px;
+    padding-bottom: 50px;
+}
 
 .image_row img{
  width: 100%;
 }
 
+.card-img-top {
+    width: 100%;
+    height: 250px;
+    min-height: 250px;
+    /* object-fit: contain; */
+    object-fit: cover;
+}
+
+.card-image-overlay  {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 250px;
+    z-index: 4;
+    
+    border-top-left-radius: 0.35rem;
+    border-top-right-radius: 0.35rem;
+}
+
+.card-btn-container {
+    position: absolute;
+    top: 12px;
+    right: 10px;
+    z-index: 8;
+    display: none;
+}
+
+.card-btn-container .btn {
+    background-color: #ffffff;
+    border-radius: 100%;
+    font-size: 14px;
+    padding: 8px;
+    width: 40px;
+    height: 40px;
+}
+
+.card-btn-container .btn:first-child {
+    color: #310fa0;
+    margin-right: 10px
+}
+
+.card-btn-container .btn:nth-child(2) {
+    color: #a51212;
+    margin-right: 10px;
+}
+
+
 .image_title_form {
     display: none;
+    height: 100%;
+    align-items: center;
+}
+
+.image_title {
+    margin: 0;
+    text-align: center;
+    font-size: 16px;
 }
 
 .editing {
@@ -68,19 +148,142 @@ body {
 }
 
 .image_title_form.editing {
-    display: block;
+    display: flex;
 }
 
 .image_title.editing {
     display: none;
 }
 
+
+/* display images start end */
+
+/* share image css start */
+
+.shareImageBox {
+    width: 100%;
+    height: calc(100vh - 82px);
+}
+
+.shareImageBox img {
+    width: 100%;
+    height: calc(100% - 80px);
+    object-fit: contain;
+}
+
+.shareImageBox p {
+    margin: 12px;
+    font-size: 32px;
+    font-weight: 500;
+    text-align: center;
+}
+
+
+/* share image css end */
+
+.carousel-item {
+    padding-top: 30px;
+}
+
 .carousel-control-prev, 
 .carousel-control-next {
-    background-color: white;
+    width: 130px;
+}
+
+
+.imageCarouselCard {
+    width: 100%;
+    height: calc(100vh - 122px);
+}
+
+.imageCarouselCard img {
+    width: 100%;
+    height: calc(100vh - 220px);
+    object-fit: contain;
+}
+
+.imageCarouselCard p {
+    margin: 12px;
+    font-size: 32px;
+    font-weight: 500;
+    text-align: center;
+}
+
+
+
+.carousel-control-prev div, .carousel-control-next div {
+    background-color: rgb(166 166 166);
     border-radius: 100%;
-    opacity: 1;
     width: 50px;
     height: 50px;
-    margin-top: 200px;
+    padding: 8px;
 }
+
+.carousel-control-prev div .carousel-control-prev-icon  {
+    transform: translate(-1px, 1px);
+}
+
+.carousel-control-next div .carousel-control-next-icon  {
+    transform: translate(2px, 2px);
+}
+
+
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (max-width: 1200px) {}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (max-width: 992px) {
+    .home_default_card {
+        width: 80%;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (max-width: 768px) {
+    .home_default_card {
+        width: 90%;
+    }
+    
+    .home_default_card h5 {
+        font-size: 32px;
+    }
+    
+    .home_default_card p {
+        font-size: 24px
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (max-width: 600px) {
+    .navbar {
+        padding: 12px 30px;
+    }
+    
+    .home_default_card {
+        padding: 30px 20px;
+    }
+
+    .home_default_card h5 {
+        font-size: 28px;
+    }
+    
+    .home_default_card p {
+        font-size: 20px
+    }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 420px) {
+    .navbar {
+        padding: 12px 20px;
+    }
+
+    .navBtn {
+        border-radius: 30px;
+        padding: 8px 20px;
+        margin-left: 6px;
+    }
+}
+
+
