@@ -11,6 +11,7 @@
     $query = $query_one . " UNION " . $query_second;
 
     $query_run = mysqli_query($conn, $query);
+
 ?> 
 
 
@@ -22,13 +23,12 @@
 
     <div class="carousel-inner" id="carousel_container">
 
-       
-
         <?php
-        if (mysqli_num_rows($query_run) > 0) {
-            foreach ($query_run as $row) {
-            $img = $row['path'] . $row['image_name'] . "-" . $row['upload_time'] . "." . $row['image_ext'];
-        ?>
+            if (mysqli_num_rows($query_run) > 0) {
+                foreach ($query_run as $row) {
+                $img = $row['path'] . $row['image_name'] . "-" . $row['upload_time'] . "." . $row['image_ext'];
+                $img = "../../" . $img;
+            ?>
 
         <?php print_r($_SESSION['temp_current_queries']); ?>
 
@@ -39,7 +39,7 @@
                     <p >
                         <?php echo $row['image_name']; ?>
                     </p>
-                </div>
+                </div> 
             </div>
 
         <?php }} ?>

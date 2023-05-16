@@ -3,6 +3,33 @@ body {
     margin: 0;
 }
 
+/* styling for 404 page */
+.error-template {
+    padding: 80px 15px;
+    text-align: center;
+}
+
+.error-template h1 {
+    font-size: 60px;
+}
+
+.error-template h2 {
+    font-size: 32px;
+}
+
+.error-template .error-details {
+    margin: 10px 0 20px;
+}
+
+
+
+
+
+
+/* end styling for 404 page */
+
+
+
 .home_default {
     position: absolute;
     left: 0;
@@ -226,7 +253,6 @@ body {
 .carousel-control-next div .carousel-control-next-icon  {
     transform: translate(2px, 2px);
 }
-
 
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */

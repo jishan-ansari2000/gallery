@@ -6,29 +6,22 @@ include("../config/connection.php");
 
 function get_past_url($auth_type)
 {
+    // $queryString = http_build_query($queryArray);
+
     $past_queries_array = $_SESSION["current_queries"];
     $past_script_name = $_SESSION['current_script_name'];
-    $past_queries = "?";
 
-    print_r($_SESSION['temp_current_queries']);
-    print_r($past_queries_array);
-
-    foreach ($past_queries_array as $key => $value) {
-        if ($key != "auth") {
-            if ($past_queries != "?")
-                $past_queries = $past_queries . "&" . $key . "=" . $value;
-            else
-                $past_queries = $past_queries . $key . "=" . $value;
-        }
-    }
-
-    $past_url = $past_script_name . $past_queries;
-
-    if (substr($past_url, -1) == "?") {
-        $past_url = $past_url . $auth_type;
+    if($auth_type) {
+        $past_queries_array['auth'] = $auth_type;
     } else {
-        $past_url = $past_url . "&" . $auth_type;
+        unset($past_queries_array['auth']);
     }
+
+    $past_queries = http_build_query($past_queries_array);
+
+    $past_url = "";
+    if($past_queries) $past_url = $past_script_name . "?" . $past_queries;
+    else $past_url = $past_script_name;
 
     return $past_url;
 }
@@ -67,7 +60,7 @@ if (isset($_POST['signup'])) {
         }
     }
 
-    $past_url = get_past_url("auth=signup");
+    $past_url = get_past_url("signup");
     header("location:..{$past_url}");
 
 }
@@ -89,14 +82,14 @@ if (isset($_POST['login'])) {
         $_SESSION['status'] = "Email or password wrong";
     }
 
-    $past_url = get_past_url("auth=login");
+    $past_url = get_past_url("login");
     header("location:..{$past_url}");
 
 }
 
 if (isset($_POST['logout'])) {
 
-    $current_url = get_past_url("auth=logout");
+    $current_url = get_past_url("");
 
     session_unset();
 
