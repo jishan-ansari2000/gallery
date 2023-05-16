@@ -11,9 +11,25 @@ $_SESSION["current_queries"] = $query_array;
 
 if($_SESSION["current_url"] != "/views/pages/home.php" && !isset($_SESSION["email"])) 
     $_SESSION["not_loggedIn"] = "You are not Logged In, Please Login to access this route!";
+
+
+$Project_title = "Gallery | ";
+
+if($_SESSION['current_script_name'] == "/views/pages/home.php") {
+
+    $Project_title .= "Home";
+
+} else if ( $_SESSION['current_script_name'] == "/views/pages/detailed_image.php" ) {
+
+    $Project_title .= "Detail Images";
+
+} else if( $_SESSION['current_script_name'] == "/views/pages/shared_image.php" ) {
+
+    $Project_title .= "Shared Image";
+
+}
+
 ?>
-
-
 
 <!doctype html>
 <html lang="en">
@@ -29,7 +45,7 @@ if($_SESSION["current_url"] != "/views/pages/home.php" && !isset($_SESSION["emai
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <!-- for adding a jQuery -->
-    <title>Gallery</title>
+    <title><?php echo $Project_title ?></title>
 </head>
 
 <body>

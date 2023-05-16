@@ -7,10 +7,13 @@
             <button class="btn btn-primary navBtn" data-bs-target="#loginModalToggle" data-bs-toggle="modal">Login</button>
             <button class="btn btn-outline-primary navBtn" data-bs-target="#signupModalToggle" data-bs-toggle="modal">Sign Up</button>
         <?php } else { ?>
+            <a href="/views/pages/bin.php"><button class="btn btn-outline-primary navBtn" data-bs-target="#signupModalToggle" data-bs-toggle="modal">Bin</button></a>
             <form action="../../controllers/auth.php" method="POST" style="display: inline-block">
                 <button type="submit" class="btn btn-danger navBtn" name="logout" value="logout">logout</button>
             </form>
         <?php } ?>
+
+        
       
     </div>
 
@@ -28,28 +31,24 @@
             </div>
             <div class="modal-body">
 
-                <?php
-                $auth_status = isset($_SESSION['status']) && isset($_GET['auth']) && $_GET['auth'] == "login";
-                $notLoggedIn = isset($_SESSION["not_loggedIn"]) && !(isset($_SESSION['status']) && isset($_GET['auth']) && $_GET['auth'] == "signup");
+                <!-- status message added here by using jQuery -->
+                <div class="loginWarningContainer">
 
-                if (($auth_status || $notLoggedIn) && !isset($_SESSION['404']) ) {
-                  ?>
+                    <?php if (isset($_SESSION["not_loggedIn"]) ) { ?>
 
                         <div class="alert alert-warning alert-dismissible fade show" role="alert">
                             <strong>Hey! </strong>
-                            <?php  
-                              if($auth_status) echo $_SESSION['status'];
-                              else echo $_SESSION["not_loggedIn"];
-                             ?>
+                            <?php echo $_SESSION["not_loggedIn"]; ?>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                        <?php
+                    <?php
                         unset($_SESSION['not_loggedIn']);
-                        unset($_SESSION['status']);
-                } 
-                ?>
+                    } 
+                    ?>
 
-                <form action="../../controllers/auth.php" method="POST">
+                </div>
+
+                <form id="loginForm">
                     <div class="mb-3">
                         <label for="login_email" class="form-label">Email address</label>
                         <input type="email" class="form-control" id="login_email" aria-describedby="emailHelp"
@@ -59,7 +58,7 @@
                         <label for="login_assword" class="form-label">Password</label>
                         <input type="password" class="form-control" id="login_password" name="login_password">
                     </div>
-                    <button type="submit" class="btn btn-primary navBtn" name="login" value="login">Login</button>
+                    <button type="submit" class="btn btn-primary navBtn">Login</button>
                 </form>
 
             </div>
@@ -71,7 +70,7 @@
     </div>
 </div>
 
-<!-- *************************Logout Modal*********** -->
+<!-- *************************Signup Modal*********** -->
 
 <div class="modal fade" id="signupModalToggle" aria-labelledby="signupModalToggleLabel" tabindex="-1"
     style="display: none;" aria-hidden="true">
@@ -83,23 +82,10 @@
             </div>
             <div class="modal-body">
 
-                <?php
+                <!-- status message added here by using jQuery -->
+                <div class="signupWarningContainer"></div>
 
-                if (isset($_SESSION['status']) && isset($_GET['auth']) && $_GET['auth'] == "signup") {
-                  ?>
-
-                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                            <strong>Hey! </strong>
-                            <?php echo $_SESSION['status'] ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-
-                        <?php
-                  unset($_SESSION['status']);
-                }
-                ?>
-
-                <form action="../../controllers/auth.php" method="POST">
+                <form id="signupForm">
                     <div class="mb-3">
                         <label for="signup_username" class="form-label">User Name</label>
                         <input type="text" class="form-control" id="signup_username" aria-describedby="emailHelp"
@@ -118,9 +104,10 @@
                         <label for="signup_cpassword" class="form-label">Confirm Password</label>
                         <input type="password" class="form-control" id="signup_cpassword" name="signup_cpassword">
                     </div>
-                    <button type="submit" class="btn btn-primary navBtn" name="signup" value="signup">Sign Up</button>
+                    <button type="submit" class="btn btn-primary navBtn">Sign Up</button>
                 </form>
             </div>
+
             <div class="modal-footer">
                 <button class="btn btn-primary navBtn" data-bs-target="#loginModalToggle" data-bs-toggle="modal">Back to
                     Login</button>
