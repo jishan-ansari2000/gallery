@@ -7,7 +7,7 @@
             <button class="btn btn-primary navBtn" data-bs-target="#loginModalToggle" data-bs-toggle="modal">Login</button>
             <button class="btn btn-outline-primary navBtn" data-bs-target="#signupModalToggle" data-bs-toggle="modal">Sign Up</button>
         <?php } else { ?>
-            <form action="controllers/auth.php" method="POST" style="display: inline-block">
+            <form action="../../controllers/auth.php" method="POST" style="display: inline-block">
                 <button type="submit" class="btn btn-danger navBtn" name="logout" value="logout">logout</button>
             </form>
         <?php } ?>
@@ -32,7 +32,7 @@
                 $auth_status = isset($_SESSION['status']) && isset($_GET['auth']) && $_GET['auth'] == "login";
                 $notLoggedIn = isset($_SESSION["not_loggedIn"]) && !(isset($_SESSION['status']) && isset($_GET['auth']) && $_GET['auth'] == "signup");
 
-                if ($auth_status || $notLoggedIn ) {
+                if (($auth_status || $notLoggedIn) && !isset($_SESSION['404']) ) {
                   ?>
 
                         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -49,7 +49,7 @@
                 } 
                 ?>
 
-                <form action="controllers/auth.php" method="POST">
+                <form action="../../controllers/auth.php" method="POST">
                     <div class="mb-3">
                         <label for="login_email" class="form-label">Email address</label>
                         <input type="email" class="form-control" id="login_email" aria-describedby="emailHelp"
@@ -59,12 +59,12 @@
                         <label for="login_assword" class="form-label">Password</label>
                         <input type="password" class="form-control" id="login_password" name="login_password">
                     </div>
-                    <button type="submit" class="btn btn-primary" name="login" value="login">Login</button>
+                    <button type="submit" class="btn btn-primary navBtn" name="login" value="login">Login</button>
                 </form>
 
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" data-bs-target="#signupModalToggle" data-bs-toggle="modal">New User Sign
+                <button class="btn btn-primary navBtn" data-bs-target="#signupModalToggle" data-bs-toggle="modal">New User Sign
                     Up</button>
             </div>
         </div>
@@ -99,7 +99,7 @@
                 }
                 ?>
 
-                <form action="controllers/auth.php" method="POST">
+                <form action="../../controllers/auth.php" method="POST">
                     <div class="mb-3">
                         <label for="signup_username" class="form-label">User Name</label>
                         <input type="text" class="form-control" id="signup_username" aria-describedby="emailHelp"
@@ -118,11 +118,11 @@
                         <label for="signup_cpassword" class="form-label">Confirm Password</label>
                         <input type="password" class="form-control" id="signup_cpassword" name="signup_cpassword">
                     </div>
-                    <button type="submit" class="btn btn-primary" name="signup" value="signup">Sign Up</button>
+                    <button type="submit" class="btn btn-primary navBtn" name="signup" value="signup">Sign Up</button>
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" data-bs-target="#loginModalToggle" data-bs-toggle="modal">Back to
+                <button class="btn btn-primary navBtn" data-bs-target="#loginModalToggle" data-bs-toggle="modal">Back to
                     Login</button>
             </div>
         </div>
@@ -132,7 +132,7 @@
 
 <!-- This code is working for when and what modal is going to open -->
 <?php
-if (!isset($_SESSION['email']) && $_SESSION["current_url"] != "/"):
+if (!isset($_SESSION['email']) && !isset($_SESSION['404']) && $_SESSION["current_url"] != "/views/pages/home.php"):
   ?>
 
 <script>

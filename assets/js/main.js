@@ -1,3 +1,6 @@
+let root_route = "../../";
+
+
 function show_updateImage_input(id) {
   let target_form = $("#" + id + " .image_title_form");
   let target_p = $("#" + id + " .image_title");
@@ -31,9 +34,12 @@ $(".image_title_form").submit(function(e){
     image_name: image_name,
   };
 
+  console.log(formData);
+
+
   $.ajax({
     type: "POST",
-    url: "controllers/image_handler.php",
+    url: `${root_route}controllers/image_handler.php`,
     data: formData,
   }).done(function (data) {
     let obj = $.parseJSON(data);
@@ -57,7 +63,7 @@ $(".image_delete_form").submit(function(e){
 
     $.ajax({
       type: "POST",
-      url: "controllers/image_handler.php",
+      url: `${root_route}controllers/image_handler.php`,
       data: {
         delete_image: "delete_image",
         id: id
@@ -179,7 +185,7 @@ $(document).ready(function () {
 
       $.ajax({
         type: "POST",
-        url: "controllers/image_handler.php",
+        url: `${root_route}controllers/image_handler.php`,
         data: {
           prev_image: "next_image",
           id: id,
@@ -202,7 +208,7 @@ $(document).ready(function () {
           $.each(images, function (index, value) {
             console.log(index, value);
 
-            let img =
+            let img = root_route +
               value["path"] +
               value["image_name"] +
               "-" +
@@ -252,7 +258,7 @@ $(document).ready(function () {
 
       $.ajax({
         type: "POST",
-        url: "controllers/image_handler.php",
+        url: `${root_route}controllers/image_handler.php`,
         data: {
           next_image: "next_image",
           id: id,
@@ -273,7 +279,7 @@ $(document).ready(function () {
 
           let flag = true;
           $.each(images, function (index, value) {
-            let img = value["path"] + value["image_name"] + "-" + value["upload_time"] + "." +  value["image_ext"];
+            let img = root_route + value["path"] + value["image_name"] + "-" + value["upload_time"] + "." +  value["image_ext"];
 
             let str = `
               <div class="carousel-item" data-value="${value["id"]}">
@@ -313,7 +319,7 @@ $(document).ready(function () {
 
     $.ajax({
       type: "POST",
-      url: "controllers/image_handler.php",
+      url: `${root_route}controllers/image_handler.php`,
       data: {
         set_session_id_forurl: "set_session_id",
         image_id: currentChild.data("value")

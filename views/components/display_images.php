@@ -9,9 +9,6 @@ $query_run = mysqli_query($conn, $query);
 ?>
 
 <div class="container">
-
-
-
     <div class="row image_row">
 
         <?php
@@ -22,6 +19,8 @@ $query_run = mysqli_query($conn, $query);
                 // echo date('d/m/Y', $row["upload_time"]);
         
                 $img = $row['path'] . $row['image_name'] . "-" . $row['upload_time'] . "." . $row['image_ext'];
+                $img = "../../" . $img;
+
                 ?>
 
                 <div class="col col-lg-3 col-md-4 col-sm-6 col-12 mt-4" id="<?php echo $row['id']; ?>">
@@ -42,27 +41,27 @@ $query_run = mysqli_query($conn, $query);
 
                             <div class="card-btn-container" onmouseover="btnMouseOver(<?php echo $row['id']; ?>)"
                                 onmouseout="btnMouseOut(<?php echo $row['id']; ?>)">
-                                <button class="btn" onclick="show_updateImage_input(<?php echo $row['id']; ?>);">
+
+                                <!-- edit button -->
+                                <button class="btn" onclick="show_updateImage_input(<?php echo $row['id']; ?>);"> 
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
 
+                                <!-- delete button -->
                                 <form class="image_delete_form" style="display: inline-block;">
                                     <input type="hidden" value="<?php echo $row['id']; ?>" name="image_id" />
-                                    <button class="btn" type="submit" name="delete_image" value="Delete">
+                                    <button class="btn" type="submit" name="delete_image" value="Delete">        
                                         <i class="bi bi-trash3-fill"></i>
                                     </button>
                                     <!-- <input /> -->
                                 </form>
 
-                                <button class="btn" data-bs-target="#shareModalToggle-<?php echo $row['id']; ?>"
-                                    data-bs-toggle="modal">
+                                 <!-- share button -->
+                                <button class="btn" data-bs-target="#shareModalToggle-<?php echo $row['id']; ?>"  
+                                    data-bs-toggle="modal">                                                        
                                     <i class="bi bi-share-fill"></i>
                                 </button>
                             </div>
-
-
-
-
 
                             <!-- ***********share Modal start*********** -->
 
@@ -79,7 +78,7 @@ $query_run = mysqli_query($conn, $query);
                                         <div class="modal-body">
                                             <div class="input-group mb-3">
                                                 <p>
-                                                    <?php echo "http://" . $_SERVER['HTTP_HOST'] . "/" . "shared_image.php" . "?img_id=" . $row['id']; ?>
+                                                    <?php echo "http://" . $_SERVER['HTTP_HOST'] . "/views/pages/" . "shared_image.php" . "?img_id=" . $row['id']; ?>
                                                 </p>
                                             </div>
                                         </div>
