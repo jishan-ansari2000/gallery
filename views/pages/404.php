@@ -1,4 +1,5 @@
 <?php include("../components/header.php"); ?>
+
 <?php $_SESSION['404'] = "'it's 404" ?>
 
 <!-- navbar includes top navbar as well as login signup models -->
@@ -18,7 +19,5 @@
         </div>
     </div>
 </div>
-
-
 
 <?php include("../components/footer.php"); ?>

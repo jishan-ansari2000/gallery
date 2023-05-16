@@ -37,17 +37,23 @@ if (isset($_POST['signup'])) {
     $query_email = "SELECT * FROM user_table where email = '$email'";
     $query_email_run = mysqli_query($conn, $query_email);
 
+    $result = [
+        "status"=> "failed",
+        "message" => "",
+        "url" => "http://" . $_SERVER['HTTP_HOST'] . get_past_url(""),
+    ];
+
     if ($query_email_run && mysqli_num_rows($query_email_run)) {
 
-        $_SESSION['status'] = "Email is already registered!";
+        $result["message"] = "Email is already registered!";
 
     } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
-        $_SESSION['status'] = "$email is not a valid email address";
+        $result["message"] = "$email is not a valid email address";
 
     } else if ($password != $cpassword) {
 
-        $_SESSION['status'] = "Password and Comfirm Password are not same";
+        $result["message"] = "Password and Comfirm Password are not same";
 
     } else {
         $query = "INSERT INTO user_table (username, email, password) values('$name', '$email', '$password')";
@@ -55,13 +61,16 @@ if (isset($_POST['signup'])) {
 
         if ($query_run) {
             $_SESSION['email'] = $email;
+            $result["status"] = "success";
         } else {
-            $_SESSION['status'] = "Registration Failed!";
+            $result["message"] = "Some how Registration Failed!";
         }
     }
 
-    $past_url = get_past_url("signup");
-    header("location:..{$past_url}");
+    // $past_url = get_past_url("signup");
+    // header("location:..{$past_url}");
+
+    echo json_encode($result);
 
 }
 
@@ -75,16 +84,24 @@ if (isset($_POST['login'])) {
     $query = "SELECT * FROM user_table where (email = '$email' && password = '$password')";
     $query_run = mysqli_query($conn, $query);
 
+    $result = [
+        "status"=> "",
+        "message" => "",
+        "url" => "http://" . $_SERVER['HTTP_HOST'] . get_past_url(""),
+    ];
 
     if ($query_run && mysqli_num_rows($query_run) > 0) {
         $_SESSION['email'] = $email;
+        $result["status"] = "success";
+        $result["message"] = "login success";
     } else {
-        $_SESSION['status'] = "Email or password wrong";
+        $result["status"] = "failed";
+        $result["message"] = "Email or password wrong";
     }
 
-    $past_url = get_past_url("login");
-    header("location:..{$past_url}");
-
+    // header("location:..{$past_url}");
+    
+    echo json_encode($result);
 }
 
 if (isset($_POST['logout'])) {

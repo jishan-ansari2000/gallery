@@ -3,7 +3,7 @@
 
 $user_email = $_SESSION['email'];
 
-$query = "SELECT * FROM images_table where user_email = '$user_email' order by id desc";
+$query = "SELECT * FROM images_table where user_email = '$user_email' && id not in (SELECT image_id from deleted_images) order by id desc";
 $query_run = mysqli_query($conn, $query);
 
 ?>

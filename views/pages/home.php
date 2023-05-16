@@ -1,7 +1,5 @@
 <?php include("../components/header.php"); ?>
 
-<?php unset($_SESSION['404']); ?>
-
 <!-- navbar includes top navbar as well as login signup models -->
 <?php include("../components/navbar.php"); ?>
 

@@ -1,5 +1,103 @@
 let root_route = "../../";
 
+$("#signupForm").submit(function(e){
+  e.preventDefault();
+
+  let formData = {
+    signup: "signup",
+    signup_username: e.target.signup_username.value,
+    signup_email: e.target.signup_email.value,
+    signup_password: e.target.signup_password.value,
+    signup_cpassword: e.target.signup_cpassword.value,
+  };
+
+  console.log(formData);
+
+  $.ajax({
+    type: "POST",
+    url: `${root_route}controllers/auth.php`,
+    data: formData,
+  }).done(function (data) {
+    let obj = $.parseJSON(data);
+    console.log(obj);
+    // if (obj.status === "success") {
+    //   window.location.href = obj["url"];
+    // } else if(obj.status === "failed") {
+    //   let status_str = `
+    //     <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    //         <strong>Hey! </strong> ${obj["message"]}
+    //         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    //     </div>
+    //   `;
+
+    //   $(".signupWarningContainer").html(status_str);
+    // }
+  });
+});
+
+$("#loginForm").submit(function(e){
+  e.preventDefault();
+
+  let formData = {
+    login: "login",
+    login_email: e.target.login_email.value,
+    login_password: e.target.login_password.value,
+  };
+
+  // console.log(formData);
+
+  $.ajax({
+    type: "POST",
+    url: `${root_route}controllers/auth.php`,
+    data: formData,
+  }).done(function (data) {
+    let obj = $.parseJSON(data);
+    console.log(obj);
+    if (obj.status === "success") {
+      window.location.href = obj["url"];
+    } else if(obj.status === "failed") {
+      let status_str = `
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Hey! </strong> ${obj["message"]}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      `;
+      $(".loginWarningContainer").html(status_str);
+    }
+  });
+});
+
+function imageMouseOver(id) {
+  let cardimgOverlay = $(`#${id} .card-image-overlay`);
+  let cardBtnContainer = $(`#${id} .card-btn-container`);
+
+  cardimgOverlay.css("background", "rgba(60, 60, 60, 0.4)");
+  cardBtnContainer.css("display", "block");
+}
+
+function imageMouseOut(id) {
+  let cardimgOverlay = $(`#${id} .card-image-overlay`);
+  let cardBtnContainer = $(`#${id} .card-btn-container`);
+
+  cardBtnContainer.css("display", "none");
+  cardimgOverlay.css("background", "unset");
+}
+
+function btnMouseOver(id) {
+  let cardimgOverlay = $(`#${id} .card-image-overlay`);
+  let cardBtnContainer = $(`#${id} .card-btn-container`);
+
+  cardBtnContainer.css("display", "block");
+  cardimgOverlay.css("background","rgba(60, 60, 60, 0.4)");
+}
+
+function btnMouseOut(id) {
+  let cardimgOverlay = $(`#${id} .card-image-overlay`);
+  let cardBtnContainer = $(`#${id} .card-btn-container`);
+
+  cardBtnContainer.css("display", "none");
+  cardimgOverlay.css("background","unset");
+}
 
 function show_updateImage_input(id) {
   let target_form = $("#" + id + " .image_title_form");
@@ -14,11 +112,11 @@ function show_updateImage_input(id) {
 
   input_field.focus();
 
-  var inputValue = input_field.val();
+  let inputValue = input_field.val();
   input_field.val('');
   input_field.val(inputValue);
 
-  var inputElement = input_field.get(0);
+  let inputElement = input_field.get(0);
   inputElement.scrollLeft = inputElement.scrollWidth;
 }
 
@@ -28,14 +126,13 @@ $(".image_title_form").submit(function(e){
   let id = e.target.image_id.value;
   let image_name = e.target.image_name.value
 
-  var formData = {
+  let formData = {
     update_image: "update_image",
     id: id,
     image_name: image_name,
   };
 
-  console.log(formData);
-
+  // console.log(formData);
 
   $.ajax({
     type: "POST",
@@ -76,9 +173,47 @@ $(".image_delete_form").submit(function(e){
       }
     });
   } 
+}); 
 
-  
+$(".bin_image_delete_form").submit(function(e){
+  e.preventDefault();
+
+  if(confirm('Are you sure you want to delete the Image')){
+    let id = e.target.image_id.value;
+
+    $.ajax({
+      type: "POST",
+      url: `${root_route}controllers/image_handler.php`,
+      data: {
+        bin_image_delete_form: "bin_image_delete_form",
+        id: id
+      },
+    }).done(function (data) {
+      let obj = $.parseJSON(data);
+      if (obj.status === "success") {
+        console.log( `#${obj.image_id}`);
+        $(`#${obj.image_id}`).remove();
+      }
+    });
+  } 
 });
+
+function restoreImageFun(id) {
+  $.ajax({
+      type: "POST",
+      url: `${root_route}controllers/image_handler.php`,
+      data: {
+        restoreImage: "bin_image_delete_form",
+        id: id
+      },
+    }).done(function (data) {
+      let obj = $.parseJSON(data);
+      if (obj.status === "success") {
+        console.log(obj);
+        $(`#${obj.image_id}`).remove();
+      }
+    });
+}
 
 // function copyLinkHandler(id) {
 //   let shareLinkInput = $(`#shareLinkInput-${id}`);
@@ -94,63 +229,11 @@ $(".image_delete_form").submit(function(e){
 
 // }
 
-function imageMouseOver(id) {
-  let cardimgOverlay = $(`#${id} .card-image-overlay`);
-  let cardBtnContainer = $(`#${id} .card-btn-container`);
-
-  cardimgOverlay.css("background", "rgba(60, 60, 60, 0.4)");
-  cardBtnContainer.css("display", "block");
-}
-
-function imageMouseOut(id) {
-  let cardimgOverlay = $(`#${id} .card-image-overlay`);
-  let cardBtnContainer = $(`#${id} .card-btn-container`);
-
-  cardBtnContainer.css("display", "none");
-  cardimgOverlay.css("background", "unset");
-}
-
-function btnMouseOver(id) {
-  let cardimgOverlay = $(`#${id} .card-image-overlay`);
-  let cardBtnContainer = $(`#${id} .card-btn-container`);
-
-  cardBtnContainer.css("display", "block");
-  cardimgOverlay.css("background","rgba(60, 60, 60, 0.4)");
-}
-
-function btnMouseOut(id) {
-  let cardimgOverlay = $(`#${id} .card-image-overlay`);
-  let cardBtnContainer = $(`#${id} .card-btn-container`);
-
-  cardBtnContainer.css("display", "none");
-  cardimgOverlay.css("background","unset");
-}
 
 
 
 
-// $(document).ready(function () {
-
-//   $('.card-image-overlay').hover(function() {
-//     let cardBtnContainer = $(`#.card-btn-container`);
-
-//     console.log("hover");
-
-//     cardBtnContainer.css("display", "block");
-
-//   }, function(){
-//     let cardBtnContainer = $('.card-btn-container');
-
-//     console.log("hover");
-
-//     cardBtnContainer.css("display", "none");
-//   });
-
-// })
-
-
-
-  // carousel start here
+//************************ * carousel start here
 
 $(document).ready(function () {
   $("#imageCarousel").carousel({
@@ -338,4 +421,4 @@ $(document).ready(function () {
   });
 });
 
-  // carousel End here
+  //*********************** */ carousel End here

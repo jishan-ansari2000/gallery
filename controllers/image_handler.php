@@ -113,6 +113,55 @@ if (isset($_POST['delete_image'])) {
             $target_image_name = $row['image_name'];
         }
     }
+    $set_delete_query = "INSERT INTO deleted_images (image_id) values ('$id')";
+
+    $set_delete_query_run = mysqli_query($conn, $set_delete_query);
+
+
+    // $query = "DELETE FROM images_table where id = '$id' && user_email = '$user_email'";
+    // $query_run = mysqli_query($conn, $query);
+
+    $result = [
+        "status" => "",
+        "image_id" => "",
+    ];
+
+    // if ($query_run) {
+    //     unlink("../" . $old_img);
+    //     $result["status"] = "success";
+    //     $result["image_id"] = $id;
+    // } else {
+    //     $result["status"] = "failed";
+    //     $result["image_id"] = $id;
+    // }
+
+    if ($set_delete_query_run) {
+        $result["status"] = "success";
+        $result["image_id"] = $id;
+    } else {
+        $result["status"] = "failed";
+        $result["image_id"] = $id;
+    }
+
+    echo json_encode($result);
+}
+
+if (isset($_POST['bin_image_delete_form'])) {
+
+    $id = $_POST['id'];
+    $user_email = $_SESSION['email'];
+
+    $get_query = "SELECT * FROM images_table where id = '$id' && user_email = '$user_email'";
+    $get_query_run = mysqli_query($conn, $get_query);
+
+    $old_img = "";
+    $target_image_name = "";
+    if (mysqli_num_rows($get_query_run) > 0) {
+        foreach ($get_query_run as $row) {
+            $old_img = $row['path'] . $row['image_name'] . "-" . $row['upload_time'] . "." . $row['image_ext'];
+            $target_image_name = $row['image_name'];
+        }
+    }
 
     $query = "DELETE FROM images_table where id = '$id' && user_email = '$user_email'";
     $query_run = mysqli_query($conn, $query);
@@ -126,6 +175,10 @@ if (isset($_POST['delete_image'])) {
         unlink("../" . $old_img);
         $result["status"] = "success";
         $result["image_id"] = $id;
+
+        $query_deleted = "DELETE FROM deleted_images where image_id = '$id'";
+        $query_deleted_run = mysqli_query($conn, $query_deleted);
+
     } else {
         $result["status"] = "failed";
         $result["image_id"] = $id;
@@ -133,6 +186,33 @@ if (isset($_POST['delete_image'])) {
 
     echo json_encode($result);
 }
+
+if (isset($_POST['restoreImage'])) {
+
+    $id = $_POST['id'];
+
+    
+
+    $query = "DELETE FROM deleted_images where image_id = '$id'";
+    $query_run = mysqli_query($conn, $query);
+
+    $result = [
+        "status" => "",
+        "image_id" => "",
+    ];
+
+    if ($query_run) {
+        $result["status"] = "success";
+        $result["image_id"] = $id;
+
+    } else {
+        $result["status"] = "failed";
+        $result["image_id"] = $id;
+    }
+
+    echo json_encode($result);
+}
+
 
 
 if( isset( $_POST['next_image'] ) ) {

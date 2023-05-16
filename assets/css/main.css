@@ -23,9 +23,6 @@ body {
 
 
 
-
-
-
 /* end styling for 404 page */
 
 
@@ -155,6 +152,14 @@ body {
 .card-btn-container .btn:nth-child(2) {
     color: #a51212;
     margin-right: 10px;
+}
+
+.restoreBtn {
+    width: unset !important;
+    height: unset !important;
+    border-radius: 26px !important;
+    color: black !important;
+    font-weight: 500 !important;
 }
 
 
