@@ -1,5 +1,36 @@
 let root_route = "../../";
 
+$(document).ready(function () {
+  $.ajax({
+    type: "POST",
+    url: `${root_route}controllers/auth.php`,
+    data: {
+      "get_session_during_reload": "get_session_during_reload",
+    },
+  }).done(function (data) {
+    let obj = $.parseJSON(data);
+    console.log(obj);
+    if(!obj.email && !obj["404"] && obj.current_url != "/views/pages/home.php") {
+
+      $('#loginModalToggle').modal('show');
+
+      $('#loginModalToggle').on('hidden.bs.modal', function() {
+
+          if (!obj.email && !$('#signupModalToggle').is(':visible')) {
+              $('#loginModalToggle').modal('show');
+          }
+      });
+
+      $('#signupModalToggle').on('hidden.bs.modal', function() {
+
+          if (!obj.email) {
+              $('#loginModalToggle').modal('show');
+          }
+      });
+    }
+  });
+})
+
 $("#signupForm").submit(function(e){
   e.preventDefault();
 
@@ -20,18 +51,18 @@ $("#signupForm").submit(function(e){
   }).done(function (data) {
     let obj = $.parseJSON(data);
     console.log(obj);
-    // if (obj.status === "success") {
-    //   window.location.href = obj["url"];
-    // } else if(obj.status === "failed") {
-    //   let status_str = `
-    //     <div class="alert alert-warning alert-dismissible fade show" role="alert">
-    //         <strong>Hey! </strong> ${obj["message"]}
-    //         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    //     </div>
-    //   `;
+    if (obj.status === "success") {
+      window.location.href = obj["url"];
+    } else if(obj.status === "failed") {
+      let status_str = `
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Hey! </strong> ${obj["message"]}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      `;
 
-    //   $(".signupWarningContainer").html(status_str);
-    // }
+      $(".signupWarningContainer").html(status_str);
+    }
   });
 });
 
@@ -236,6 +267,7 @@ function restoreImageFun(id) {
 //************************ * carousel start here
 
 $(document).ready(function () {
+
   $("#imageCarousel").carousel({
     interval: 1000,
     wrap: false,

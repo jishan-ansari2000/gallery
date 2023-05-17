@@ -1,6 +1,6 @@
-<?php include("../components/header.php"); ?>
-
 <?php $_SESSION['404'] = "'it's 404" ?>
+
+<?php include("../components/header.php"); ?>
 
 <!-- navbar includes top navbar as well as login signup models -->
 <?php include("../components/navbar.php"); ?>

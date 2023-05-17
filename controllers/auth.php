@@ -4,6 +4,16 @@ session_start();
 
 include("../config/connection.php");
 
+if(isset($_POST['get_session_during_reload'])){
+    $result = [
+        "email" => $_SESSION['email'],
+        "404" => $_SESSION['404'],
+        "current_url" => $_SESSION["current_url"]
+    ];
+    
+    echo json_encode($result);
+}
+
 function get_past_url($auth_type)
 {
     // $queryString = http_build_query($queryArray);
