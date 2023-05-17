@@ -4,8 +4,6 @@ session_start();
 
 include("../config/connection.php");
 
-
-
 if (isset($_POST['upload'])) {
     $user_email = $_SESSION['email'];
     $images = $_FILES['gallery_images'];
@@ -13,13 +11,21 @@ if (isset($_POST['upload'])) {
     $path = "assets/images/user_uploaded/";
     $allowed_extensions = array('gif', 'png', 'jpg', 'jpeg');
 
-    $current_time = time(); // Get the current time
+    // Get the current time
 
     if (!empty($images['name'])) {
+        $time_diff = 0;
         foreach ($images['name'] as $key => $image) {
 
             $filename = $images["name"][$key];
             $tempname = $images["tmp_name"][$key];
+
+            $currentTimestamp = time();
+            $current_time = strtotime("+$time_diff second", $currentTimestamp);
+
+            $time_diff += 1;
+
+            // $current_time = time();
 
             // Image validation 
 
@@ -30,10 +36,15 @@ if (isset($_POST['upload'])) {
 
             if (!in_array($file_extension, $allowed_extensions)) {
                 $_SESSION['status'] = "You are allowed with only jpg png jpeg and gig";
-                header('location: ../index.php');
+                header('location: ../');
             } else {
 
-                $query = "INSERT INTO images_table (path, user_email, image_name, image_ext, upload_time) values ('$path','$user_email', '$file_filename', '$file_extension', '$current_time' )";
+                $query = "INSERT INTO images_table 
+                            (path, user_email, image_name, image_ext, upload_time) 
+                            values ('$path','$user_email', '$file_filename', '$file_extension', '$current_time' )";
+                
+                
+                
                 $query_run = mysqli_query($conn, $query);
 
                 if ($query_run) {
@@ -53,6 +64,72 @@ if (isset($_POST['upload'])) {
         }
     }
 
+}
+
+if(isset($_POST["get_images"])) {
+    
+
+    $id= $_POST['image_id'];
+
+    $user_email = $_SESSION['email'];
+
+    $result = [
+        "status"=> "success",
+        "images" => "",
+        "HTTP_HOST" => $_SERVER['HTTP_HOST'],
+
+    ];
+    
+
+    $query = "SELECT * FROM images_table 
+            where user_email = '$user_email' 
+            && id < '$id' 
+            && id not in (SELECT image_id from deleted_images) 
+            order by id desc limit 12";
+    
+    $query_run = mysqli_query($conn, $query);
+
+    if(mysqli_num_rows($query_run) > 0) {
+        $rows = $query_run->fetch_all(MYSQLI_ASSOC);
+        $result['images'] = $rows;
+    } else {
+        $result["status"] = "zeroImages";
+        $result["message"] = "There is no any image left!";
+    }
+
+    echo json_encode($result);
+}
+
+if(isset($_POST["get_bin_images"])) {
+    
+
+    $id= $_POST['image_id'];
+
+    $user_email = $_SESSION['email'];
+
+    $result = [
+        "status"=> "success",
+        "images" => "",
+    ];
+    
+
+    $query = "SELECT * FROM images_table 
+            where user_email = '$user_email' 
+            && id < '$id' 
+            && id in (SELECT image_id from deleted_images) 
+            order by id desc limit 12";
+    
+    $query_run = mysqli_query($conn, $query);
+
+    if(mysqli_num_rows($query_run) > 0) {
+        $rows = $query_run->fetch_all(MYSQLI_ASSOC);
+        $result['images'] = $rows;
+    } else {
+        $result["status"] = "zeroImages";
+        $result["message"] = "There is no any image left!";
+    }
+
+    echo json_encode($result);
 }
 
 
@@ -187,12 +264,10 @@ if (isset($_POST['bin_image_delete_form'])) {
     echo json_encode($result);
 }
 
+
 if (isset($_POST['restoreImage'])) {
 
     $id = $_POST['id'];
-
-    
-
     $query = "DELETE FROM deleted_images where image_id = '$id'";
     $query_run = mysqli_query($conn, $query);
 
@@ -215,6 +290,8 @@ if (isset($_POST['restoreImage'])) {
 
 
 
+
+
 if( isset( $_POST['next_image'] ) ) {
     $id= $_POST['id'];
 
@@ -225,7 +302,12 @@ if( isset( $_POST['next_image'] ) ) {
         "images" => $id
     ];
 
-    $query = "SELECT * FROM images_table where user_email = '$user_email' && id < '$id' order by id desc limit 5";
+    $query = "SELECT * FROM images_table 
+                where user_email = '$user_email' 
+                && id < '$id'
+                && id not in (SELECT image_id from deleted_images) 
+                order by id desc limit 5";
+    
     $query_run = mysqli_query($conn, $query);
 
     if(mysqli_num_rows($query_run) > 0) {
@@ -249,7 +331,13 @@ if( isset( $_POST['prev_image'] ) ) {
         "images" => $id
     ];
 
-    $query = "SELECT * FROM images_table where user_email = '$user_email' && id > '$id' order by id limit 5";
+    $query = "SELECT * FROM images_table 
+                where user_email = '$user_email' 
+                && id > '$id' 
+                && id not in (SELECT image_id from deleted_images) 
+                order by id limit 5";
+    
+    
     $query_run = mysqli_query($conn, $query);
 
     if(mysqli_num_rows($query_run) > 0) {
@@ -266,8 +354,6 @@ if( isset( $_POST['prev_image'] ) ) {
 if(isset($_POST['set_session_id_forurl'])) {
     
     $_SESSION['current_queries']['id'] = $_POST['image_id'];
-
- 
 
     echo json_encode($_SESSION['current_queries']);
 

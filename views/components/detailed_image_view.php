@@ -6,8 +6,8 @@
 
     // $query = "SELECT * FROM images_table where user_email = '$user_email' && id <= '$id' order by id desc limit 4";
 
-    $query_one = "(SELECT * FROM images_table where user_email = '$user_email' && id > '$id' order by id limit 1)";
-    $query_second = "(SELECT * FROM images_table where user_email = '$user_email' && id <= '$id' order by id desc limit 2)";
+    $query_one = "(SELECT * FROM images_table where user_email = '$user_email' && id > '$id' && id not in (SELECT image_id from deleted_images) order by id limit 1)";
+    $query_second = "(SELECT * FROM images_table where user_email = '$user_email' && id <= '$id' && id not in (SELECT image_id from deleted_images) order by id desc limit 2)";
     $query = $query_one . " UNION " . $query_second;
 
     $query_run = mysqli_query($conn, $query);

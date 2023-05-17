@@ -21,11 +21,7 @@ body {
     margin: 10px 0 20px;
 }
 
-
-
 /* end styling for 404 page */
-
-
 
 .home_default {
     position: absolute;
@@ -162,8 +158,31 @@ body {
     font-weight: 500 !important;
 }
 
+.selection_btn {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 12;
 
-.image_title_form {
+    border-radius: 100%;
+    padding: 8px;
+    width: 40px;
+    height: 40px;
+}
+
+.selection_btn > input:disabled {
+    border-radius: 100%;
+    border: 1px solid grey;
+    opacity: 1;
+}
+
+.selection_btn > input:checked {
+    background-color: #310fa0;
+    
+}
+
+
+.image_title_input {
     display: none;
     height: 100%;
     align-items: center;
@@ -179,7 +198,7 @@ body {
     color: green;
 }
 
-.image_title_form.editing {
+.image_title_input.editing {
     display: flex;
 }
 
@@ -211,7 +230,30 @@ body {
 }
 
 
+
+/* **********Bin********* */
+
+#bin_images_container {
+    position: relative;
+}
+
+.binContainerBtns {
+    position: sticky;
+    z-index: 12;
+    top: 12px;
+    right: 12px;
+    flex-direction: column;
+}
+
+.selectionStart .selection_btn {
+    display: none;
+}
+
+
+
 /* share image css end */
+
+/* *****CArousel start********** */
 
 .carousel-item {
     padding-top: 30px;
@@ -260,6 +302,9 @@ body {
 }
 
 
+/* ****Carousel End********** */
+
+
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (max-width: 1200px) {}
 
@@ -302,6 +347,15 @@ body {
     .home_default_card p {
         font-size: 20px
     }
+
+    
+    .imageCarouselCard p {
+        margin: 10px;
+        font-size: 20px;
+        font-weight: 400;
+    }
+
+
 }
 
 /* Extra small devices (phones, 600px and down) */

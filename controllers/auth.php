@@ -14,7 +14,7 @@ if(isset($_POST['get_session_during_reload'])){
     echo json_encode($result);
 }
 
-function get_past_url($auth_type)
+function get_past_url($auth_type)  //this is helping function for getting current url
 {
     // $queryString = http_build_query($queryArray);
 
@@ -37,6 +37,7 @@ function get_past_url($auth_type)
 }
 
 if (isset($_POST['signup'])) {
+    
     $name = $_POST['signup_username'];
     $email = $_POST['signup_email'];
     $password = $_POST['signup_password'];
