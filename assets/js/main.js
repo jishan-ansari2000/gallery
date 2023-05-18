@@ -710,16 +710,14 @@ $(document).ready(function () {
           let flag = true;
 
           $.each(images, function (index, value) {
-            console.log(index, value);
+            // console.log(index, value);
 
             let str = get_carousel_image_template(value);
-
-            flag = false;
 
             $("#carousel_container").prepend(str); //append child to carousel
           });
         } else if (obj.status == "zeroImages") {
-          prevBtn.hide();
+          console.log("there is no image more");
         }
       });
     }
@@ -764,7 +762,8 @@ $(document).ready(function () {
             $("#carousel_container").append(str); //append child to carousel
           });
         } else if (obj.status == "zeroImages") {
-          $("#imageStatus").html(str);
+          // $("#imageStatus").html(str);
+          console.log("there is no image more");
         }
       });
     }
