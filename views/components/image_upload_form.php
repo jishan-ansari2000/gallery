@@ -3,7 +3,7 @@
     data-bs-target="#imageUploadModal" 
     data-bs-toggle="modal" 
 >
-    <i class="bi bi-upload"></i> Upload Images
+    <i class="bi bi-upload"></i> <span>Upload Images</span>
 </button>
 
 <div class="modal fade" id="imageUploadModal" aria-labelledby="imageUploadModalLabel" tabindex="-1"

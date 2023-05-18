@@ -4,6 +4,25 @@ session_start();
 
 include("../config/connection.php");
 
+function get_updated_filename($conn, $filename) {
+
+    $image_no = 0;
+    $query_check = "SELECT * FROM images_table where image_name = '$filename'";
+    $query_check_run = mysqli_query($conn, $query_check);
+
+    while(mysqli_num_rows($query_check_run) > 0) {
+        $image_no += 1;
+        $temp_filename = $filename . "(" . $image_no . ")";
+        $query_check = "SELECT * FROM images_table where image_name = '$temp_filename'";
+        $query_check_run = mysqli_query($conn, $query_check);
+    }
+
+    if($image_no > 0) $filename = $filename . "(" . $image_no . ")";
+
+    return $filename;
+
+}
+
 if (isset($_POST['upload'])) {
     $user_email = $_SESSION['email'];
     $images = $_FILES['gallery_images'];
@@ -20,12 +39,9 @@ if (isset($_POST['upload'])) {
             $filename = $images["name"][$key];
             $tempname = $images["tmp_name"][$key];
 
-            $currentTimestamp = time();
-            $current_time = strtotime("+$time_diff second", $currentTimestamp);
-
-            $time_diff += 1;
-
-            // $current_time = time();
+            // $currentTimestamp = time(); 
+            // $current_time = strtotime("+$time_diff second", $currentTimestamp);
+            // $time_diff += 1;
 
             // Image validation 
 
@@ -39,10 +55,11 @@ if (isset($_POST['upload'])) {
                 header('location: ../');
             } else {
 
+                $file_filename = get_updated_filename($conn, $file_filename);
+
                 $query = "INSERT INTO images_table 
-                            (path, user_email, image_name, image_ext, upload_time) 
-                            values ('$path','$user_email', '$file_filename', '$file_extension', '$current_time' )";
-                
+                            (path, user_email, image_name, image_ext) 
+                            values ('$path','$user_email', '$file_filename', '$file_extension' )";
                 
                 
                 $query_run = mysqli_query($conn, $query);
@@ -50,7 +67,7 @@ if (isset($_POST['upload'])) {
                 if ($query_run) {
                     $_SESSION['status'] = "Image stored successfully";
 
-                    $folder = $path . $file_filename . "-" . $current_time . "." . $file_extension;
+                    $folder = $path . $file_filename . "." . $file_extension;
                     move_uploaded_file($tempname, "../" . $folder);
 
                     header('location: ../index.php');
@@ -132,11 +149,15 @@ if(isset($_POST["get_bin_images"])) {
     $query_run = mysqli_query($conn, $query);
 
     if(mysqli_num_rows($query_run) > 0) {
+
         $rows = $query_run->fetch_all(MYSQLI_ASSOC);
         $result['images'] = $rows;
+
     } else {
+
         $result["status"] = "zeroImages";
         $result["message"] = "There is no any image left!";
+        
     }
 
     echo json_encode($result);
@@ -155,12 +176,17 @@ if (isset($_POST['update_image'])) {
     $old_img = "";
     $new_img = "";
 
+    if(!$image_name) $image_name = "untitled";
+
+    $image_name = get_updated_filename($conn, $image_name);
+    
     if (mysqli_num_rows($get_query_run) > 0) {
         foreach ($get_query_run as $row) {
-            $old_img = $row['path'] . $row['image_name'] . "-" . $row['upload_time'] . "." . $row['image_ext'];
-            $new_img = $row['path'] . $image_name . "-" . $row['upload_time'] . "." . $row['image_ext'];
+            $old_img = $row['path'] . $row['image_name'] .  "." . $row['image_ext'];
+            $new_img = $row['path'] . $image_name .  "." . $row['image_ext'];
         }
     }
+
 
     $query = "UPDATE images_table set image_name = '$image_name' where id = '$id'";
     $query_run = mysqli_query($conn, $query);
@@ -196,7 +222,7 @@ if (isset($_POST['delete_image'])) {
     $target_image_name = "";
     if (mysqli_num_rows($get_query_run) > 0) {
         foreach ($get_query_run as $row) {
-            $old_img = $row['path'] . $row['image_name'] . "-" . $row['upload_time'] . "." . $row['image_ext'];
+            $old_img = $row['path'] . $row['image_name'] . "." . $row['image_ext'];
             $target_image_name = $row['image_name'];
         }
     }
@@ -256,6 +282,7 @@ if (isset($_POST['bin_image_delete_form']) || isset($_POST['deleteSelected'])  |
                 $ids[] = $row["image_id"];
             }
         }
+
     } else {
         $ids = $_POST['id'];
     }
@@ -271,7 +298,7 @@ if (isset($_POST['bin_image_delete_form']) || isset($_POST['deleteSelected'])  |
 
     if(mysqli_num_rows($get_query_run) > 0) {
         foreach($get_query_run as $row) {
-            $old_img = $row['path'] . $row['image_name'] . "-" . $row['upload_time'] . "." . $row['image_ext'];
+            $old_img = $row['path'] . $row['image_name'] . "." . $row['image_ext'];
             $target_image_name = $row['image_name'];
 
             $current_id = $row['id'];
@@ -280,6 +307,7 @@ if (isset($_POST['bin_image_delete_form']) || isset($_POST['deleteSelected'])  |
             $query_run = mysqli_query($conn, $query);
 
             if ($query_run) {
+
                 unlink("../" . $old_img);
                 $result["status"] = "success";
                 $result["image_ids"][] = $current_id;
