@@ -1,6 +1,7 @@
 <nav class="navbar shadow-sm navbar-light bg-light">
 
     <a class="navbar-brand" href="/">Gallery</a>
+
     <div>
         
         <?php if(!isset($_SESSION['email'])) { ?>
@@ -115,37 +116,3 @@
         </div>
     </div>
 </div>
-
-
-<!-- This code is working for when and what modal is going to open -->
-<?php
-if (!isset($_SESSION['email']) && !isset($_SESSION['404']) && $_SESSION["current_url"] != "/views/pages/home.php"):
-  ?>
-
-<script>
-$(document).ready(function() {
-    // Show the modal
-
-    <?php if (isset($_GET['auth']) && $_GET['auth'] == "signup") { ?>
-        $('#signupModalToggle').modal('show');
-    <?php } else { ?>
-        $('#loginModalToggle').modal('show');
-    <?php } ?>
-
-    $('#loginModalToggle').on('hidden.bs.modal', function() {
-
-        if (<?php echo !isset($_SESSION['email']) ?> && !$('#signupModalToggle').is(':visible')) {
-            $('#loginModalToggle').modal('show');
-        }
-    });
-
-    $('#signupModalToggle').on('hidden.bs.modal', function() {
-
-        if (<?php echo !isset($_SESSION['email']) ?>) {
-            $('#loginModalToggle').modal('show');
-        }
-    });
-});
-</script>
-<?php endif;
-?>

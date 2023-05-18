@@ -19,7 +19,7 @@
         <form action="../../controllers/image_handler.php" method="POST" enctype="multipart/form-data">
           <div class="mb-3">
             <label for="gallery_images" class="form-label">Select Images</label>
-            <input type="file" class="form-control" id="gallery_images" aria-describedby="emailHelp" name="gallery_images[]" multiple>
+            <input type="file" class="form-control" id="gallery_images"  aria-describedby="emailHelp" accept="image/*" name="gallery_images[]" multiple>
           </div>
           
           <button type="submit" class="btn btn-primary navBtn" name="upload" value="Upload">Upload</button>
