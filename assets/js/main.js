@@ -145,9 +145,7 @@ $(document).ready(function () {
     let img =
       root_route +
       image["path"] +
-      image["image_name"] +
-      "-" +
-      image["upload_time"] +
+      image["image_name"]  +
       "." +
       image["image_ext"];
 
@@ -235,7 +233,7 @@ $(document).ready(function () {
                         <input type="hidden" name="image_id" value="${
                           image["id"]
                         }" />
-                        <input type="text" aria-label="Image name" class="form-control" name="image_name" placeholder="unknown"
+                        <input type="text" aria-label="Image name" class="form-control" name="image_name" placeholder="untitled"
                             value="${image["image_name"]}">
                         <button class="btn btn-outline-secondary" type="submit" style="display: none;"></button>
                     </div>
@@ -317,9 +315,7 @@ $(document).ready(function () {
     let img =
       root_route +
       image["path"] +
-      image["image_name"] +
-      "-" +
-      image["upload_time"] +
+      image["image_name"]  +
       "." +
       image["image_ext"];
 
@@ -661,8 +657,6 @@ $(document).ready(function () {
       root_route +
       value["path"] +
       value["image_name"] +
-      "-" +
-      value["upload_time"] +
       "." +
       value["image_ext"];
 

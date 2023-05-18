@@ -355,6 +355,18 @@ body {
         font-weight: 400;
     }
 
+    .uploadBtn {
+        border-radius: 100% !important;
+        width: 70px;
+        height: 70px;
+        font-size: 27px;
+        padding: 0;
+    }
+
+    .uploadBtn span {
+        display: none;
+    }
+
 
 }
 
@@ -369,6 +381,8 @@ body {
         padding: 8px 20px;
         margin-left: 6px;
     }
+
+   
 }
 
 

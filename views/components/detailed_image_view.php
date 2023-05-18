@@ -26,7 +26,7 @@
         <?php
             if (mysqli_num_rows($query_run) > 0) {
                 foreach ($query_run as $row) {
-                $img = $row['path'] . $row['image_name'] . "-" . $row['upload_time'] . "." . $row['image_ext'];
+                $img = $row['path'] . $row['image_name'] .  "." . $row['image_ext'];
                 $img = "../../" . $img;
             ?>
 

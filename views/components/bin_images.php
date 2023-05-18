@@ -29,7 +29,7 @@ $query_run = mysqli_query($conn, $query);
 
                     // echo date('d/m/Y', $row["upload_time"]);
             
-                    $img = $row['path'] . $row['image_name'] . "-" . $row['upload_time'] . "." . $row['image_ext'];
+                    $img = $row['path'] . $row['image_name'] .  "." . $row['image_ext'];
                     $img = "../../" . $img;
 
                     ?>

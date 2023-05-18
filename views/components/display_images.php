@@ -19,7 +19,7 @@ $query_run = mysqli_query($conn, $query);
 
                     // echo date('d/m/Y', $row["upload_time"]);
             
-                    $img = $row['path'] . $row['image_name'] . "-" . $row['upload_time'] . "." . $row['image_ext'];
+                    $img = $row['path'] . $row['image_name'] . "." . $row['image_ext'];
                     $img = "../../" . $img;
 
                     ?>
@@ -93,18 +93,13 @@ $query_run = mysqli_query($conn, $query);
 
                                 <!-- Image Title start -->
 
-                                <p class="image_title">
-                                    <?php if ($row['image_name'])
-                                        echo $row['image_name'];
-                                    else
-                                        echo "unknown" ?>
-                                    </p>
+                                <p class="image_title"><?php echo $row['image_name']?> </p>
 
                                     <form class="image_title_input" method="POST">
                                         <div class="input-group">
                                             <input type="hidden" name="image_id" value="<?php echo $row['id']; ?>" />
                                         <input type="text" aria-label="Image name" class="form-control" name="image_name"
-                                            placeholder="unknown" value="<?php echo $row['image_name']; ?>">
+                                            placeholder="untitled" value="<?php echo $row['image_name']; ?>">
                                         <button class="btn btn-outline-secondary" type="submit" style="display: none;"></button>
                                     </div>
                                 </form>
