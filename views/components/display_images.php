@@ -77,7 +77,10 @@ $query_run = mysqli_query($conn, $query);
                                             <div class="modal-body">
                                                 <div class="input-group mb-3">
                                                     <p>
-                                                        <?php echo "http://" . $_SERVER['HTTP_HOST'] . "/views/pages/" . "shared_image.php" . "?img_id=" . $row['id']; ?>
+                                                        <?php 
+                                                            $encrypted_id = openssl_encrypt($_SESSION['email'] . "-" . $row['id'], $ciphering, $secret_key, $options, $secret_iv);
+                                                            echo "http://" . $_SERVER['HTTP_HOST'] . "/views/pages/" . "shared_image.php" . "?img_id=" . $encrypted_id; 
+                                                        ?>
                                                     </p>
                                                 </div>
                                             </div>

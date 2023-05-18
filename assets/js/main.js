@@ -1,5 +1,33 @@
 let root_route = "../../";
 
+let bin_home_default = `
+          <div class="home_default">
+              <div class="card border-warning shadow-lg home_default_card">
+                  <div class="card-body">
+                      <h5 class="card-title">There are no any Deleted Images</h5>
+                  </div>
+              </div>
+          </div>
+        `;
+
+let display_image_default = `
+          <div class="home_default">
+
+          <div class="card border-warning shadow-lg home_default_card">
+
+              <div class="card-body">
+                  <h5 class="card-title">There are no any uploaded Images</h5>
+                  <p class="card-text">Please Upload your Images</p>
+                  <button class="btn btn-success uploadBtn" data-bs-target="#imageUploadModal"
+                      data-bs-toggle="modal" style="position: static;">
+                      <i class="bi bi-upload"></i> Upload Images
+                  </button>
+              </div>
+          </div>
+
+          </div>
+          `;
+
 // ***************** User Login logout system handle here ***********
 // ***************** User Login logout system handle here ***********
 // ***************** User Login logout system handle here ***********
@@ -123,6 +151,8 @@ $(document).ready(function () {
       "." +
       image["image_ext"];
 
+    // $encrypted_id = openssl_encrypt($image['id'], $ciphering, $secret_key, $options, $secret_iv);
+
     let str = `
       <div class="col col-lg-3 col-md-4 col-sm-6 col-12 mt-4" id="${
         image["id"]
@@ -188,7 +218,7 @@ $(document).ready(function () {
                             <div class="modal-body">
                                 <div class="input-group mb-3">
                                     <p>
-                                    http://${HTTP_HOST}/views/pages/shared_image.php?img_id=${image["id"]}
+                                    http://${HTTP_HOST}/views/pages/shared_image.php?img_id=${image['encripted_id']}
                                     </p>
                                 </div>
                             </div>
@@ -243,6 +273,8 @@ $(document).ready(function () {
         },
       }).done(function (data) {
         let obj = $.parseJSON(data);
+
+        console.log(obj);
 
         if (obj.status == "success") {
           let images = obj["images"];
@@ -539,6 +571,11 @@ function delete_image(id) {
       if (obj.status === "success") {
         console.log(`#${obj.image_id}`);
         $(`#${obj.image_id}`).remove();
+
+        if ( $('.image_row').children().length === 0 ) {
+          $('.image_row').append(display_image_default);
+        }
+
       }
     });
   }
@@ -555,13 +592,23 @@ $(document).on("submit", ".bin_image_delete_form", function (e) {
       url: `${root_route}controllers/image_handler.php`,
       data: {
         bin_image_delete_form: "bin_image_delete_form",
-        id: id,
+        id: [id],
       },
     }).done(function (data) {
       let obj = $.parseJSON(data);
       if (obj.status === "success") {
-        console.log(`#${obj.image_id}`);
-        $(`#${obj.image_id}`).remove();
+
+        $.each(obj.image_ids, function( index, id ) {
+          console.log(`#${id}`);
+          $(`#${id}`).remove();
+        });
+
+        if ( $('.image_row').children().length === 0 ) {
+          $('.image_row').append(bin_home_default);
+        }
+
+
+        // console.log(obj);
       }
     });
   }
@@ -578,8 +625,13 @@ function restoreImageFun(id) {
   }).done(function (data) {
     let obj = $.parseJSON(data);
     if (obj.status === "success") {
-      console.log(obj);
+      // console.log(obj);
       $(`#${obj.image_id}`).remove();
+
+      if ( $('.image_row').children().length === 0 ) {
+        $('.image_row').append(bin_home_default);
+      }
+
     }
   });
 }
@@ -785,15 +837,62 @@ function select_image_handler(id) {
 }
 
 function deleteSelected() {
-  $.ajax({
-    type: "POST",
-    url: `${root_route}controllers/image_handler.php`,
-    data: {
-      "deleteSelected": "deleteSelected",
-      "selected_ids": bin_checked_images
-    }
-  }).done(function(data){
-    console.log(data);
-  })
+  if (confirm("Are you sure you want to delete these selected Images")) {
+    $.ajax({
+      type: "POST",
+      url: `${root_route}controllers/image_handler.php`,
+      data: {
+        deleteSelected: "deleteSelected",
+        id: bin_checked_images,
+      },
+    }).done(function (data) {
+      let obj = $.parseJSON(data);
+      if (obj.status === "success") {
+  
+        $.each(obj.image_ids, function( index, id ) {
+          console.log(`#${id}`);
+          $(`#${id}`).remove();
+        });
+  
+        if ( $('.image_row').children().length === 0 ) {
+          $('.image_row').append(bin_home_default);
+        }
+  
+        // console.log(obj);
+      }
+    });
+  }
+  
+}
+
+function deleteAllBin() {
+  if (confirm("Are you sure you want to delete all these Images")) {
+    $.ajax({
+      type: "POST",
+      url: `${root_route}controllers/image_handler.php`,
+      data: {
+        deleteAllBin: "deleteAllBin",
+        id: bin_checked_images,
+        all: true
+      },
+    }).done(function (data) {
+      let obj = $.parseJSON(data);
+      if (obj.status === "success") {
+  
+        // console.log(obj);
+  
+        $.each(obj.image_ids, function( index, id ) {
+          console.log(`#${id}`);
+          $(`#${id}`).remove();
+        });
+  
+        if ( $('.image_row').children().length === 0 ) {
+          $('.image_row').append(bin_home_default);
+        }
+  
+      }
+    });
+  }
+  
 }
 

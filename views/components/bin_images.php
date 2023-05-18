@@ -17,7 +17,7 @@ $query_run = mysqli_query($conn, $query);
         <div class="binContainerBtns">
             <button class="btn btn-success navBtn temp" onclick="selectHandler();">Select</button>
             <button class="btn btn-danger navBtn" onclick="deleteSelected();">Delete Selected</button>
-            <button class="btn btn-danger navBtn">Delete All</button>
+            <button class="btn btn-danger navBtn" onclick="deleteAllBin();">Delete All</button>
         </div>
 
         <div class="row image_row">

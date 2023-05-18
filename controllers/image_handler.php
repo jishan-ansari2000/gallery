@@ -77,7 +77,7 @@ if(isset($_POST["get_images"])) {
         "status"=> "success",
         "images" => "",
         "HTTP_HOST" => $_SERVER['HTTP_HOST'],
-
+        "ids" => []
     ];
     
 
@@ -91,7 +91,17 @@ if(isset($_POST["get_images"])) {
 
     if(mysqli_num_rows($query_run) > 0) {
         $rows = $query_run->fetch_all(MYSQLI_ASSOC);
+        
+        foreach($rows as $key => $value) {
+            // $rows[$key]['encripted_id'][] = $value['id'];
+
+            $encripted_id = openssl_encrypt($user_email . "-" . $rows[$key]['id'], $ciphering, $secret_key, $options, $secret_iv);
+            
+            $rows[$key]['encripted_id'] = $encripted_id;
+            
+        }
         $result['images'] = $rows;
+
     } else {
         $result["status"] = "zeroImages";
         $result["message"] = "There is no any image left!";
@@ -223,43 +233,96 @@ if (isset($_POST['delete_image'])) {
     echo json_encode($result);
 }
 
-if (isset($_POST['bin_image_delete_form'])) {
+if (isset($_POST['bin_image_delete_form']) || isset($_POST['deleteSelected'])  || isset($_POST['deleteAllBin']) ) {
 
-    $id = $_POST['id'];
+
+    
     $user_email = $_SESSION['email'];
 
-    $get_query = "SELECT * FROM images_table where id = '$id' && user_email = '$user_email'";
+    $result = [
+        "status"=> "success",
+        "image_ids" => []
+    ];
+
+    $ids = [];
+
+    if(isset($_POST['all']) && $_POST['all']) {
+
+        $deleted_ids_query = "SELECT image_id FROM deleted_images";
+        $deleted_ids_query_run = mysqli_query($conn, $deleted_ids_query); 
+
+        if(mysqli_num_rows($deleted_ids_query_run) > 0) {
+            foreach($deleted_ids_query_run as $row) {
+                $ids[] = $row["image_id"];
+            }
+        }
+    } else {
+        $ids = $_POST['id'];
+    }
+
+    $idList = implode(',', $ids);
+
+    $get_query = "SELECT * FROM images_table 
+        where id in ($idList) && user_email = '$user_email'";
+    
     $get_query_run = mysqli_query($conn, $get_query);
 
-    $old_img = "";
-    $target_image_name = "";
-    if (mysqli_num_rows($get_query_run) > 0) {
-        foreach ($get_query_run as $row) {
+    $rows = $get_query_run->fetch_all(MYSQLI_ASSOC);
+
+    if(mysqli_num_rows($get_query_run) > 0) {
+        foreach($get_query_run as $row) {
             $old_img = $row['path'] . $row['image_name'] . "-" . $row['upload_time'] . "." . $row['image_ext'];
             $target_image_name = $row['image_name'];
+
+            $current_id = $row['id'];
+
+            $query = "DELETE FROM images_table where id = '$current_id' && user_email = '$user_email'";
+            $query_run = mysqli_query($conn, $query);
+
+            if ($query_run) {
+                unlink("../" . $old_img);
+                $result["status"] = "success";
+                $result["image_ids"][] = $current_id;
+
+                $query_deleted = "DELETE FROM deleted_images where image_id = '$current_id'";
+                $query_deleted_run = mysqli_query($conn, $query_deleted);
+
+            } else {
+                $result["status"] = "failed";
+            }
         }
     }
 
-    $query = "DELETE FROM images_table where id = '$id' && user_email = '$user_email'";
-    $query_run = mysqli_query($conn, $query);
+    // $old_img = "";
+    // $target_image_name = "";
 
-    $result = [
-        "status" => "",
-        "image_id" => "",
-    ];
+    // if (mysqli_num_rows($get_query_run) > 0) {
+    //     foreach ($get_query_run as $row) {
+    //         $old_img = $row['path'] . $row['image_name'] . "-" . $row['upload_time'] . "." . $row['image_ext'];
+    //         $target_image_name = $row['image_name'];
+    //     }
+    // }
 
-    if ($query_run) {
-        unlink("../" . $old_img);
-        $result["status"] = "success";
-        $result["image_id"] = $id;
+    // $query = "DELETE FROM images_table where id = '$id' && user_email = '$user_email'";
+    // $query_run = mysqli_query($conn, $query);
 
-        $query_deleted = "DELETE FROM deleted_images where image_id = '$id'";
-        $query_deleted_run = mysqli_query($conn, $query_deleted);
+    // $result = [
+    //     "status" => "",
+    //     "image_id" => "",
+    // ];
 
-    } else {
-        $result["status"] = "failed";
-        $result["image_id"] = $id;
-    }
+    // if ($query_run) {
+    //     unlink("../" . $old_img);
+    //     $result["status"] = "success";
+    //     $result["image_id"] = $id;
+
+    //     $query_deleted = "DELETE FROM deleted_images where image_id = '$id'";
+    //     $query_deleted_run = mysqli_query($conn, $query_deleted);
+
+    // } else {
+    //     $result["status"] = "failed";
+    //     $result["image_id"] = $id;
+    // }
 
     echo json_encode($result);
 }
