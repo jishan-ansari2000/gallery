@@ -139,127 +139,114 @@ $("#loginForm").submit(function (e) {
 
 // ********GET All Images
 // ********GET All Images
-$(document).ready(function () {
 
-  function get_image_template(image, HTTP_HOST) {
-    let img =
-      root_route +
-      image["path"] +
-      image["image_name"]  +
-      "." +
-      image["image_ext"];
+function get_image_template(image, HTTP_HOST) {
+  let img =
+    root_route +
+    image["path"] +
+    image["image_name"]  +
+    "." +
+    image["image_ext"];
 
-    // $encrypted_id = openssl_encrypt($image['id'], $ciphering, $secret_key, $options, $secret_iv);
+  // $encrypted_id = openssl_encrypt($image['id'], $ciphering, $secret_key, $options, $secret_iv);
 
-    let str = `
-      <div class="col col-lg-3 col-md-4 col-sm-6 col-12 mt-4" id="${
-        image["id"]
-      }" data-value="${image["id"]}">
+  let str = `
+    <div class="col col-lg-3 col-md-4 col-sm-6 col-12 mt-4" id="${
+      image["id"]
+    }" data-value="${image["id"]}">
 
-        <div class="card shadow-sm" style="height: 100%;">
-            <img src="${img}" class="card-img-top" alt="${image["image_name"]}">
+      <div class="card shadow-sm" style="height: 100%;">
+          <img src="${img}" class="card-img-top" alt="${image["image_name"]}">
 
-            <div class="card-footer text-muted" style="height: 100%;">
+          <div class="card-footer text-muted" style="height: 100%;">
 
-                <a href="detailed_image.php?id=${image["id"]}">
-                    <div class="card-image-overlay" onmouseover="imageMouseOver(${
-                      image["id"]
-                    })"
-                        onmouseout="imageMouseOut(${image["id"]})">
-                    </div>
-                </a>
+              <a href="detailed_image.php?id=${image["id"]}">
+                  <div class="card-image-overlay" onmouseover="imageMouseOver(${
+                    image["id"]
+                  })"
+                      onmouseout="imageMouseOut(${image["id"]})">
+                  </div>
+              </a>
 
-                <div class="card-btn-container" onmouseover="btnMouseOver(${
-                  image["id"]
-                })"
-                    onmouseout="btnMouseOut(${image["id"]})">
+              <div class="card-btn-container" onmouseover="btnMouseOver(${
+                image["id"]
+              })"
+                  onmouseout="btnMouseOut(${image["id"]})">
 
-                    <!-- edit button -->
-                    <button class="btn" onclick="show_Image_title_input(${
-                      image["id"]
-                    });"> 
-                        <i class="bi bi-pencil-square"></i>
-                    </button>
+                  <!-- edit button -->
+                  <button class="btn" onclick="show_Image_title_input(${
+                    image["id"]
+                  });"> 
+                      <i class="bi bi-pencil-square"></i>
+                  </button>
 
-                    <!-- delete button -->
-                    <button class="btn" onclick="delete_image(${
-                      image["id"]
-                    });">        
-                        <i class="bi bi-trash3-fill"></i>
-                    </button>
+                  <!-- delete button -->
+                  <button class="btn" onclick="delete_image(${
+                    image["id"]
+                  });">        
+                      <i class="bi bi-trash3-fill"></i>
+                  </button>
 
-                    <!-- share button -->
-                    <button class="btn" data-bs-target="#shareModalToggle-${
-                      image["id"]
-                    }"  
-                        data-bs-toggle="modal">                                                        
-                        <i class="bi bi-share-fill"></i>
-                    </button>
-                </div>
+                  <!-- share button -->
+                  <button class="btn" data-bs-target="#shareModalToggle-${
+                    image["id"]
+                  }"  
+                      data-bs-toggle="modal">                                                        
+                      <i class="bi bi-share-fill"></i>
+                  </button>
+              </div>
 
-                <div class="modal fade" id="shareModalToggle-${
-                  image["id"]
-                }" aria-hidden="true"
-                    aria-labelledby="shareModalToggleLabel-${
-                      image["id"]
-                    }" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="shareModalToggleLabel-${
-                                  image["id"]
-                                }">
-                                    Copy Image Link!</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="input-group mb-3">
-                                    <p>
-                                    http://${HTTP_HOST}/views/pages/shared_image.php?img_id=${image['encripted_id']}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              <div class="modal fade" id="shareModalToggle-${
+                image["id"]
+              }" aria-hidden="true"
+                  aria-labelledby="shareModalToggleLabel-${
+                    image["id"]
+                  }" tabindex="-1">
+                  <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="shareModalToggleLabel-${
+                                image["id"]
+                              }">
+                                  Copy Image Link!</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                              <div class="input-group mb-3">
+                                  <p>
+                                  http://${HTTP_HOST}/views/pages/shared_image.php?img_id=${image['encripted_id']}
+                                  </p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
 
-                <p class="image_title">${
-                  image["image_name"] ? image["image_name"] : "unknown"
-                }</p>
+              <p class="image_title">${
+                image["image_name"] ? image["image_name"] : "unknown"
+              }</p>
 
-                <form class="image_title_input">
-                    <div class="input-group">
-                        <input type="hidden" name="image_id" value="${
-                          image["id"]
-                        }" />
-                        <input type="text" aria-label="Image name" class="form-control" name="image_name" placeholder="untitled"
-                            value="${image["image_name"]}">
-                        <button class="btn btn-outline-secondary" type="submit" style="display: none;"></button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    `;
+              <form class="image_title_input">
+                  <div class="input-group">
+                      <input type="hidden" name="image_id" value="${
+                        image["id"]
+                      }" />
+                      <input type="text" aria-label="Image name" class="form-control" name="image_name" placeholder="untitled"
+                          value="${image["image_name"]}">
+                      <button class="btn btn-outline-secondary" type="submit" style="display: none;"></button>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+  `;
 
-    return str;
-  }
+  return str;
+}
 
-  let scrollTimeout;
-
-  // Function to be executed when scrolling ends
-  function handleScroll() {
-    // let totalHeight = document.body.clientHeight;
-    // let currentHeight = window.innerHeight + window.pageYOffset;
-
-    let display_images_container = $("#display_images_container");
-
-    let totalHeight = display_images_container[0].scrollHeight;
-    let currentHeight = display_images_container.scrollTop();
-
-    if (totalHeight < currentHeight + 1000) {
-      let lastImages = $(".image_row > *:last-child");
+function get_display_images() {
+  let lastImages = $(".image_row > *:last-child");
       let image_id = lastImages.data("value");
 
       $.ajax({
@@ -291,6 +278,29 @@ $(document).ready(function () {
           console.log("zero Images");
         }
       });
+}
+
+
+
+
+
+
+$(document).ready(function () {
+
+  let scrollTimeout;
+
+  // Function to be executed when scrolling ends
+  function handleScroll() {
+    // let totalHeight = document.body.clientHeight;
+    // let currentHeight = window.innerHeight + window.pageYOffset;
+
+    let display_images_container = $("#display_images_container");
+
+    let totalHeight = display_images_container[0].scrollHeight;
+    let currentHeight = display_images_container.scrollTop();
+
+    if (totalHeight < currentHeight + 1000) {
+      get_display_images();
     }
   }
 
@@ -310,93 +320,134 @@ $(document).ready(function () {
 
 // ******************GET BIN IMAGES
 // ******************GET BIN IMAGES
+
+
+function get_bin_image_template(image) {
+  let img =
+    root_route +
+    image["path"] +
+    image["image_name"]  +
+    "." +
+    image["image_ext"];
+
+  let str = `
+  
+  <div 
+      class="col col-lg-3 col-md-4 col-sm-6 col-12 mt-4" 
+      id="${image["id"]}" 
+      data-value="${image["id"]}"
+  >
+
+    <div class="card shadow-sm" style="height: 100%;">
+            <img 
+                src="${img}" 
+                class="card-img-top" 
+                alt="${image["image_name"] }"
+            >
+
+            <div class="card-footer text-muted" style="height: 100%;">
+
+                <div 
+                    class="card-image-overlay" 
+                    onmouseover="imageMouseOver(${ image["id"]})"
+                    onmouseout="imageMouseOut(${image["id"]})">
+                </div>
+
+                <!-- select button -->
+                <button 
+                    class="btn btn-light selection_btn"
+                    onclick="select_image_handler(${image["id"] });"
+                >
+                    <input class="form-check-input" type="checkbox" value="" disabled>
+                </button>
+
+
+                <div 
+                    class="card-btn-container" 
+                    onmouseover="btnMouseOver(${image["id"] })"
+                    onmouseout="btnMouseOut(${image["id"]})"
+                >
+                    <!-- edit button -->
+                    <button 
+                        class="btn btn-light restoreBtn"
+                        onclick="restoreImageFun(${image["id"]});"
+                    >
+                      <i class="bi bi-arrow-counterclockwise"></i> Restore
+                    </button>
+
+                    <!-- delete button -->
+                    <form class="bin_image_delete_form" style="display: inline-block;">
+                        <input 
+                            type="hidden" 
+                            value="${image["id"]}" 
+                            name="image_id" 
+                        />
+                        <button 
+                            class="btn" 
+                            type="submit" 
+                            name="delete_image" 
+                            value="Delete"
+                        >
+                            <i class="bi bi-trash3-fill"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Image Title start -->
+
+                <p class="image_title">
+                    ${image["image_name"] ? image["image_name"]: "unknown"}
+                </p>
+
+                <!-- Image Title End -->
+          </div>
+     </div>
+    </div>
+  
+  `;
+
+  return str;
+}
+
+function get_bin_images() {
+  let lastImages = $(".image_row > *:last-child");
+  let image_id = lastImages.data("value");
+
+  $.ajax({
+    type: "POST",
+    url: `${root_route}controllers/image_handler.php`,
+    data: {
+      get_bin_images: "get_images",
+      image_id: image_id,
+    },
+  }).done(function (data) {
+    let obj = $.parseJSON(data);
+
+    console.log(obj);
+
+    if (obj.status == "success") {
+      let images = obj["images"];
+
+      images.sort(function (a, b) {
+        return -(a.id - b.id);
+      });
+
+      $.each(images, function (index, image) {
+        let str = get_bin_image_template(image, obj);
+
+        // console.log(str);
+
+        $("#bin_images_container .image_row").append(str); //append child to carousel
+      });
+    } else if (obj.status == "zeroImages") {
+      console.log("zero Images");
+    }
+  });
+}
+
+
+
 $(document).ready(function () {
-  function get_bin_image_template(image) {
-    let img =
-      root_route +
-      image["path"] +
-      image["image_name"]  +
-      "." +
-      image["image_ext"];
-
-    let str = `
-    
-    <div 
-        class="col col-lg-3 col-md-4 col-sm-6 col-12 mt-4" 
-        id="${image["id"]}" 
-        data-value="${image["id"]}"
-    >
-
-      <div class="card shadow-sm" style="height: 100%;">
-              <img 
-                  src="${img}" 
-                  class="card-img-top" 
-                  alt="${image["image_name"] }"
-              >
-
-              <div class="card-footer text-muted" style="height: 100%;">
-
-                  <div 
-                      class="card-image-overlay" 
-                      onmouseover="imageMouseOver(${ image["id"]})"
-                      onmouseout="imageMouseOut(${image["id"]})">
-                  </div>
-
-                  <!-- select button -->
-                  <button 
-                      class="btn btn-light selection_btn"
-                      onclick="select_image_handler(${image["id"] });"
-                  >
-                      <input class="form-check-input" type="checkbox" value="" disabled>
-                  </button>
-
-
-                  <div 
-                      class="card-btn-container" 
-                      onmouseover="btnMouseOver(${image["id"] })"
-                      onmouseout="btnMouseOut(${image["id"]})"
-                  >
-                      <!-- edit button -->
-                      <button 
-                          class="btn btn-light restoreBtn"
-                          onclick="restoreImageFun(${image["id"]});"
-                      >
-                        <i class="bi bi-arrow-counterclockwise"></i> Restore
-                      </button>
-
-                      <!-- delete button -->
-                      <form class="bin_image_delete_form" style="display: inline-block;">
-                          <input 
-                              type="hidden" 
-                              value="${image["id"]}" 
-                              name="image_id" 
-                          />
-                          <button 
-                              class="btn" 
-                              type="submit" 
-                              name="delete_image" 
-                              value="Delete"
-                          >
-                              <i class="bi bi-trash3-fill"></i>
-                          </button>
-                      </form>
-                  </div>
-
-                  <!-- Image Title start -->
-
-                  <p class="image_title">
-                      ${image["image_name"] ? image["image_name"]: "unknown"}
-                  </p>
-
-                  <!-- Image Title End -->
-            </div>
-       </div>
-      </div>
-    
-    `;
-
-    return str;
-  }
 
   let scrollTimeout;
 
@@ -413,39 +464,7 @@ $(document).ready(function () {
     let currentHeight = display_images_container.scrollTop();
 
     if (totalHeight < currentHeight + 1000) {
-      let lastImages = $(".image_row > *:last-child");
-      let image_id = lastImages.data("value");
-
-      $.ajax({
-        type: "POST",
-        url: `${root_route}controllers/image_handler.php`,
-        data: {
-          get_bin_images: "get_images",
-          image_id: image_id,
-        },
-      }).done(function (data) {
-        let obj = $.parseJSON(data);
-
-        console.log(obj);
-
-        if (obj.status == "success") {
-          let images = obj["images"];
-
-          images.sort(function (a, b) {
-            return -(a.id - b.id);
-          });
-
-          $.each(images, function (index, image) {
-            let str = get_bin_image_template(image, obj);
-
-            // console.log(str);
-
-            $("#bin_images_container .image_row").append(str); //append child to carousel
-          });
-        } else if (obj.status == "zeroImages") {
-          console.log("zero Images");
-        }
-      });
+      get_bin_images();
     }
   }
 
@@ -572,6 +591,12 @@ function delete_image(id) {
           $('.image_row').append(display_image_default);
         }
 
+        if ( $('.image_row').children().length <= 8 ) {
+          get_display_images();
+        }
+
+
+
       }
     });
   }
@@ -601,6 +626,8 @@ $(document).on("submit", ".bin_image_delete_form", function (e) {
 
         if ( $('.image_row').children().length === 0 ) {
           $('.image_row').append(bin_home_default);
+        } else if ( $('.image_row').children().length <= 8 ) {
+          get_bin_images();
         }
 
 
@@ -626,6 +653,8 @@ function restoreImageFun(id) {
 
       if ( $('.image_row').children().length === 0 ) {
         $('.image_row').append(bin_home_default);
+      } else if ( $('.image_row').children().length <= 8 ) {
+        get_bin_images();
       }
 
     }
@@ -849,6 +878,10 @@ function deleteSelected() {
   
         if ( $('.image_row').children().length === 0 ) {
           $('.image_row').append(bin_home_default);
+        }
+
+        else if ( $('.image_row').children().length <= 8 ) {
+          get_bin_images();
         }
   
         // console.log(obj);
